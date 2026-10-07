@@ -1,0 +1,22 @@
+# Dependencias y artefactos de desarrollo
+node_modules/
+dist/
+build/
+
+# Archivos temporales y de respaldo
+*.tmp
+*.log
+*.bak
+*~
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Configuración de editores
+.vscode/
+.idea/
+
+# Variables de entorno y secretos
+.env
+.env.*
+*.local
