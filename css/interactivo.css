@@ -1,0 +1,486 @@
+/* ============================================================
+   css/interactivo.css  — NETSAL Laboratorio Dental Digital
+   Capa de dinamismo del prototipo: barra de progreso, reloj,
+   tema claro/oscuro, avisos (toast), modal de bienvenida,
+   contador de caracteres y estimador de presupuesto CAD/CAM.
+   ============================================================ */
+
+/* ===== Barra de progreso de lectura ===== */
+.barra-progreso {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  z-index: 500;
+  transition: width 0.1s linear;
+}
+
+/* ===== Reloj de la barra superior ===== */
+.topbar-reloj {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ===== Herramientas de la barra superior ===== */
+.topbar-tool {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--color-white);
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.topbar-tool:hover {
+  background: var(--color-secondary);
+  transform: translateY(-2px);
+}
+
+.topbar-tool svg {
+  width: 14px;
+  height: 14px;
+}
+
+.topbar-tool .icono-sol {
+  display: none;
+}
+
+.tema-oscuro .topbar-tool .icono-sol {
+  display: block;
+}
+
+.tema-oscuro .topbar-tool .icono-luna {
+  display: none;
+}
+
+/* ===== Avisos emergentes (toasts) ===== */
+.contenedor-toast {
+  position: fixed;
+  left: 1.5rem;
+  bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: min(360px, calc(100vw - 3rem));
+  z-index: 450;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: var(--radius-md);
+  background: var(--color-dark);
+  color: var(--color-white);
+  border-left: 4px solid var(--color-secondary);
+  box-shadow: var(--shadow-lg);
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: 1.45;
+  cursor: pointer;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateX(-26px);
+  transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.toast.mostrar {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.toast-exito {
+  border-left-color: #1FAE6B;
+}
+
+.toast-error {
+  border-left-color: var(--color-primary);
+}
+
+.toast-info {
+  border-left-color: var(--color-secondary);
+}
+
+.icono-toast {
+  font-size: 0.95rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* ===== Modal de bienvenida ===== */
+.modal-bienvenida {
+  position: fixed;
+  inset: 0;
+  display: none;
+  place-items: center;
+  padding: var(--space-md);
+  background: rgba(9, 9, 13, 0.62);
+  backdrop-filter: blur(4px);
+  z-index: var(--z-modal);
+}
+
+.modal-bienvenida.abierto {
+  display: grid;
+}
+
+.modal-bienvenida-contenido {
+  position: relative;
+  width: min(520px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--color-white);
+  color: var(--color-text);
+  border-top: 5px solid var(--color-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl) var(--space-lg) var(--space-lg);
+  box-shadow: var(--shadow-lg);
+  animation: subir-modal 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes subir-modal {
+  from { opacity: 0; transform: translateY(26px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.boton-cerrar-modal {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-gray);
+  color: var(--color-text-muted);
+  font-size: 1.4rem;
+  line-height: 1;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.boton-cerrar-modal:hover {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.modal-bienvenida-eyebrow {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.modal-bienvenida-contenido h2 {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 0.6rem;
+}
+
+.texto-saludo {
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+  line-height: 1.7;
+  margin-bottom: var(--space-md);
+}
+
+.boton-texto {
+  display: block;
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  background: none;
+}
+
+.boton-texto:hover {
+  color: var(--color-primary);
+}
+
+/* ===== Validación de formularios ===== */
+.campo-invalido {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px rgba(242, 29, 47, 0.12) !important;
+}
+
+.aviso-error {
+  display: block;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.aviso-error:empty {
+  display: none;
+}
+
+.contador-mensaje {
+  align-self: flex-end;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.contador-mensaje.contador-limite {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* ===== Aviso de horario del día ===== */
+.nota-horario {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: var(--space-md);
+  padding: 0.75rem 1rem;
+  border-left: 4px solid var(--color-secondary);
+  border-radius: var(--radius-sm);
+  background: var(--color-blue-soft);
+  color: var(--color-secondary-dk);
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+.nota-horario.nota-cerrado {
+  border-left-color: var(--color-primary);
+  background: var(--color-accent-soft);
+  color: var(--color-primary-dark);
+}
+
+/* ===== Estimador de presupuesto ===== */
+.section.estimador {
+  background: var(--color-white);
+}
+
+.estimador-panel {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  background: var(--color-gray);
+  box-shadow: var(--shadow-sm);
+}
+
+.estimador-campos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.estimador-campos .form-group {
+  margin-bottom: 0;
+}
+
+.estimador-campos input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background: linear-gradient(
+    90deg,
+    var(--color-primary) var(--porcentaje, 0%),
+    var(--color-border) var(--porcentaje, 0%)
+  );
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.estimador-campos input[type="range"]:focus {
+  border: none;
+  box-shadow: none;
+}
+
+.estimador-campos input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-white);
+  border: 4px solid var(--color-primary);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+}
+
+.estimador-campos input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-white);
+  border: 4px solid var(--color-primary);
+  cursor: pointer;
+}
+
+.estimador-rango-info {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.estimador-resultado {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.85rem;
+  padding: var(--space-lg);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+.estimador-etiqueta {
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.estimador-total {
+  font-family: var(--font-display);
+  font-size: var(--fs-4xl);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--color-primary);
+}
+
+.estimador-nota {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* ============================================================
+   TEMA OSCURO
+   ============================================================ */
+.tema-oscuro {
+  --color-white: #12121A;
+  --color-gray: #17171F;
+  --color-gray2: #1F1F29;
+  --color-border: #2C2C38;
+  --color-text: #E7E7EF;
+  --color-text-muted: #A3A7B8;
+  --color-accent-soft: rgba(242, 29, 47, 0.16);
+  --color-blue-soft: rgba(27, 101, 166, 0.22);
+  color-scheme: dark;
+}
+
+.tema-oscuro body {
+  background: #0B0B10;
+}
+
+.tema-oscuro .site-header {
+  background: rgba(11, 11, 16, 0.94);
+}
+
+.tema-oscuro .site-header.is-scrolled {
+  background: rgba(11, 11, 16, 0.99);
+  box-shadow: var(--shadow-md);
+}
+
+.tema-oscuro h1,
+.tema-oscuro h2,
+.tema-oscuro h3,
+.tema-oscuro h4,
+.tema-oscuro h5,
+.tema-oscuro h6 {
+  color: #F3F3F8;
+}
+
+.tema-oscuro .topbar,
+.tema-oscuro .topbar-info a,
+.tema-oscuro .topbar-info span,
+.tema-oscuro .topbar-social a,
+.tema-oscuro .topbar-tool,
+.tema-oscuro .btn,
+.tema-oscuro .floating-btn,
+.tema-oscuro .footer-social a,
+.tema-oscuro .gallery-item .tag,
+.tema-oscuro .testimonial-card,
+.tema-oscuro .service-modal-header,
+.tema-oscuro .cta-band,
+.tema-oscuro .lightbox {
+  color: #FFFFFF;
+}
+
+.tema-oscuro .btn-white {
+  color: var(--color-primary);
+}
+
+.tema-oscuro .lab-chips-compact .lab-chip {
+  background: rgba(242, 29, 47, 0.14);
+  color: var(--color-primary-light);
+}
+
+.tema-oscuro .estimador-panel {
+  background: #17171F;
+}
+
+.tema-oscuro .estimador-resultado {
+  background: #12121A;
+}
+
+.tema-oscuro .nota-horario {
+  color: #A9CDF3;
+}
+
+.tema-oscuro .nota-horario.nota-cerrado {
+  color: #FFB2BA;
+}
+
+.tema-oscuro .toast {
+  background: #1F1F29;
+  color: #FFFFFF;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  .estimador-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .contenedor-toast {
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 6rem;
+    max-width: none;
+  }
+
+  .modal-bienvenida-contenido {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .estimador-panel {
+    padding: var(--space-md);
+  }
+
+  .estimador-total {
+    font-size: var(--fs-3xl);
+  }
+}
