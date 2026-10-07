@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Imagen de referencia - reemplazar con imagen real">
+  <rect width="400" height="400" fill="#F5F7FA"/>
+  <rect x="1" y="1" width="398" height="398" fill="none" stroke="#0D4C92" stroke-width="2" stroke-dasharray="8 6"/>
+  <circle cx="200" cy="170" r="50" fill="#0D4C92" opacity="0.15"/>
+  <path d="M200 130c-4-4.7-9-6.4-14.3-6.4-5.8 0-10.6 3.7-10.6 9.8 0 2.5.8 4.6 2 6.6 1 1.5 2 3.2 2.3 5 .4 2 1 4.6 2.6 4.6 2.3 0 1.9-5.2 3.2-5.2s.9 5.2 2.8 5.2c1.6 0 2.1-2.3 2.5-4 .3-1.9 1.3-3.6 2.3-5 1.2-2 2-4.1 2-6.6 0-1.5-.3-3-1.2-4.8z" fill="#0D4C92"/>
+  <text x="200" y="280" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-size="16" font-weight="600" fill="#0D4C92">Imagen de referencia</text>
+  <text x="200" y="305" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-size="12" fill="#5A6B7B">Reemplaza este archivo con tu imagen real</text>
+</svg>
