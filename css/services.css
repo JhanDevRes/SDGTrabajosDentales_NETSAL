@@ -1,0 +1,251 @@
+/* ============================================================
+   css/services.css
+   Seccion Servicios (6 cards) y Why Us (4 cards).
+   ============================================================ */
+
+/* ===== Servicios ===== */
+.services {
+  background: var(--color-white);
+}
+
+.services .section-head {
+  margin-bottom: var(--space-xl);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+.service-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.service-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary), var(--color-red-line));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition-base);
+}
+
+.service-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 40px rgba(242, 29, 47, 0.16);
+  border-color: rgba(242, 29, 47, 0.12);
+}
+
+.service-card:hover::before {
+  transform: scaleX(1);
+}
+
+.service-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--color-accent-soft) 0%, rgba(242, 29, 47, 0.06) 100%);
+  color: var(--color-primary);
+  display: grid;
+  place-items: center;
+  margin-bottom: var(--space-md);
+  transition: background var(--transition-base), color var(--transition-base), transform var(--transition-base);
+}
+
+.service-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.service-card:hover .service-icon {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  color: var(--color-white);
+  transform: scale(1.1) rotate(-6deg);
+  box-shadow: 0 8px 20px rgba(242, 29, 47, 0.25);
+}
+
+.service-card h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  color: var(--color-text);
+  margin-bottom: var(--space-xs);
+}
+
+.service-card p {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.service-card-btn {
+  display: inline-block;
+  margin-top: var(--space-sm);
+  padding: 0.5rem 1.25rem;
+  background: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-full);
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+
+.service-card-btn:hover {
+  background: var(--color-primary);
+  color: var(--color-white);
+  transform: translateY(-2px);
+}
+
+.service-card-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ===== Why us (por que elegirnos) ===== */
+@keyframes float-badge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.why-us {
+  background: var(--color-gray);
+  overflow: hidden;
+}
+
+.why-us .container {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: var(--space-xl);
+  align-items: center;
+}
+
+.why-us-visual {
+  position: relative;
+}
+
+.why-us-visual .frame {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  aspect-ratio: 4 / 4.4;
+}
+
+.why-us-visual .frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.why-us-visual .chip {
+  position: absolute;
+  right: -6%;
+  bottom: 8%;
+  background: linear-gradient(135deg, var(--color-white) 0%, #FFF5F5 100%);
+  border-radius: var(--radius-md);
+  box-shadow: 0 16px 36px rgba(242, 29, 47, 0.16);
+  padding: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  max-width: 220px;
+  border: 1px solid rgba(242, 29, 47, 0.08);
+  animation: float-badge 4.5s ease-in-out infinite;
+}
+
+.why-us-visual .chip .icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-red-soft);
+  color: var(--color-red-line);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.why-us-visual .chip .icon-circle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.why-us-visual .chip strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  color: var(--color-primary);
+}
+
+.why-us-visual .chip span {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.why-content .section-head {
+  margin-bottom: var(--space-lg);
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.why-card {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  gap: var(--space-sm);
+  align-items: flex-start;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+  border: 1px solid transparent;
+}
+
+.why-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(242, 29, 47, 0.12);
+  border-color: rgba(242, 29, 47, 0.25);
+}
+
+.why-card .icon-check {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--color-accent-soft);
+  color: var(--color-secondary);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.why-card .icon-check svg {
+  width: 16px;
+  height: 16px;
+}
+
+.why-card h4 {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  color: var(--color-text);
+  margin-bottom: 0.15rem;
+}
+
+.why-card p {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}

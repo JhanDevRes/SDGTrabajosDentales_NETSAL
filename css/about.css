@@ -1,0 +1,155 @@
+/* ============================================================
+   css/about.css
+   Sección Acerca de nosotros: historia, misión, visión y objetivos.
+   ============================================================ */
+
+.about {
+  background: var(--color-white);
+}
+
+.about .section-head {
+  margin-bottom: var(--space-xl);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-lg);
+}
+
+.about-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+}
+
+.about-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(242, 29, 47, 0.12);
+  border-color: rgba(242, 29, 47, 0.2);
+}
+
+.about-history {
+  grid-column: 1 / -1;
+}
+
+.about-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, rgba(242, 29, 47, 0.1) 0%, rgba(27, 101, 166, 0.06) 100%);
+  color: var(--color-primary);
+  display: grid;
+  place-items: center;
+  margin-bottom: var(--space-md);
+}
+
+.about-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.about-card h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  color: var(--color-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.about-card p {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+.about-objectives ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.about-objectives li {
+  position: relative;
+  padding-left: 1.5rem;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.about-objectives li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-history {
+    grid-column: auto;
+  }
+}
+/* ===== Valores ===== */
+.about-values-card {
+  grid-column: 1 / -1;
+}
+
+.about-values-intro {
+  margin-bottom: var(--space-lg);
+}
+
+.about-values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+.value-card {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: var(--color-gray);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.value-card .icon-check {
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: var(--color-primary);
+  background: var(--color-accent-soft);
+}
+
+.value-card .icon-check svg {
+  width: 20px;
+  height: 20px;
+}
+
+.value-card h4 {
+  margin-bottom: 0.2rem;
+  font-family: var(--font-display);
+  color: var(--color-primary);
+  font-size: var(--fs-sm);
+}
+
+.value-card p {
+  font-size: var(--fs-xs);
+}
