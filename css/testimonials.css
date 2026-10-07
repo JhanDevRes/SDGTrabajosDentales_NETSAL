@@ -1,0 +1,144 @@
+.testimonials {
+  position: relative;
+  background: var(--color-primary);
+  overflow: hidden;
+}
+
+.testimonials::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(80% 120% at 90% 10%, rgba(27, 101, 166, 0.3), transparent 60%);
+}
+
+.testimonials .section-head h2,
+.testimonials .section-head .eyebrow {
+  color: var(--color-white);
+}
+
+.testimonials .section-head p {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.testimonial-slider {
+  position: relative;
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+.testimonial-track {
+  overflow: hidden;
+}
+
+.testimonial-slides {
+  display: flex;
+  transition: transform var(--transition-slow);
+}
+
+.testimonial-slide {
+  flex: 0 0 100%;
+  padding: var(--space-lg);
+}
+
+.testimonial-card {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.testimonial-card .stars {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  color: var(--color-red-line);
+  margin-bottom: var(--space-md);
+}
+
+.testimonial-card .stars svg {
+  width: 16px;
+  height: 16px;
+}
+
+.testimonial-card p.quote {
+  font-size: var(--fs-md);
+  color: var(--color-text);
+  font-style: italic;
+  margin-bottom: var(--space-md);
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+.testimonial-author img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.testimonial-author strong {
+  display: block;
+  font-family: var(--font-display);
+  color: var(--color-primary);
+  font-size: var(--fs-sm);
+}
+
+.testimonial-author span {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.slider-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin-top: var(--space-md);
+  position: relative;
+  z-index: 2;
+}
+
+.slider-arrow {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--color-white);
+  display: grid;
+  place-items: center;
+  transition: background var(--transition-fast);
+}
+
+.slider-arrow:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.slider-arrow svg {
+  width: 18px;
+  height: 18px;
+}
+
+.slider-dots {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.slider-dots button {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transition: background var(--transition-fast), width var(--transition-fast);
+}
+
+.slider-dots button.is-active {
+  background: var(--color-white);
+  width: 22px;
+  border-radius: var(--radius-full);
+}
