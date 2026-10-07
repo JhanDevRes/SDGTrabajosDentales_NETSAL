@@ -1,0 +1,430 @@
+/* ============================================
+   RESPONSIVE - mobile-first breakpoints
+   320 / 375 / 425 / 576 / 768 / 992 / 1200 / 1400
+   ============================================ */
+
+/* ----- Mobile menu (hasta 992px) ----- */
+@media (max-width: 992px) {
+  .nav-toggle {
+    display: flex;
+  }
+
+  /* Evitar desborde horizontal en móvil */
+  .hero-visual .badge-card {
+    left: 0;
+  }
+
+  .hero-visual .top-chip {
+    right: 0;
+  }
+
+  .why-us-visual .chip {
+    right: 0;
+  }
+
+  .nav-menu {
+    position: fixed;
+    inset: 0;
+    top: 0;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-md);
+    background: var(--color-white);
+    transform: translateX(100%);
+    transition: transform var(--transition-base), visibility var(--transition-base);
+    z-index: 205;
+    visibility: hidden;
+    pointer-events: none;
+    overflow-y: auto;
+    padding-block: 5rem;
+  }
+
+  .nav-menu.is-open {
+    transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .nav-menu a {
+    font-size: var(--fs-lg);
+  }
+
+  /* Cuando el menu esta abierto, ocultar botones flotantes */
+  body.menu-open .floating-actions {
+    display: none !important;
+  }
+
+  .hero .container,
+  .why-us .container,
+  .faq .container,
+  .contact .container {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Sección contacto: evitar cortes en tablet */
+  .contact-info,
+  .contact-form-wrap {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .contact-map {
+    aspect-ratio: auto;
+    min-height: 320px;
+  }
+
+  .why-us-visual {
+    order: -1;
+    max-width: 500px;
+    width: 100%;
+    margin-inline: auto;
+  }
+
+  .why-us .container {
+    gap: var(--space-lg);
+  }
+
+  .why-us-visual .chip {
+    right: 0;
+    max-width: 200px;
+    padding: var(--space-sm);
+  }
+
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .doctors-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ----- 1200px ----- */
+@media (max-width: 1200px) {
+  .hero-visual .badge-card {
+    left: 0;
+  }
+
+  .hero-visual .top-chip {
+    right: 0;
+  }
+}
+
+/* ----- 992px (tablets) ----- */
+@media (max-width: 992px) {
+  :root {
+    --section-padding: 3.5rem;
+  }
+
+  .hero-visual {
+    max-width: 460px;
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  .hero-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-subtitle {
+    max-width: 100%;
+  }
+
+  .hero-actions {
+    justify-content: center;
+  }
+
+  .hero-stats {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero-main-logo {
+    max-width: 360px;
+  }
+}
+
+/* ----- 768px ----- */
+@media (max-width: 768px) {
+  .hero-main-logo {
+    max-width: 300px;
+  }
+
+  /* Topbar: evitar desborde */
+  .topbar .container {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-xs);
+    padding-block: 0.4rem;
+  }
+
+  .topbar-info {
+    gap: var(--space-sm);
+  }
+
+  .topbar-info a:first-child span {
+    display: none;
+  }
+
+  .topbar-info a:first-child svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .topbar-social {
+    gap: 0.4rem;
+  }
+
+  .topbar-social a {
+    width: 24px;
+    height: 24px;
+  }
+
+  .topbar-social svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .testimonial-slide {
+    padding: var(--space-sm);
+  }
+
+  .testimonial-card {
+    padding: var(--space-lg);
+  }
+
+  .contact-form {
+    padding: var(--space-lg);
+  }
+
+  .hero-visual .badge-card {
+    max-width: 180px;
+    padding: var(--space-sm);
+  }
+
+  .hero-visual .top-chip {
+    display: none;
+  }
+}
+
+/* ----- 576px ----- */
+@media (max-width: 576px) {
+  .hero-main-logo {
+    max-width: 260px;
+  }
+
+  .hero-title .accent {
+    white-space: normal;
+  }
+
+  .hero-title .accent::after {
+    display: none;
+  }
+
+  .hero-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-subtitle {
+    max-width: 100%;
+  }
+
+  .hero-actions {
+    align-items: center;
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .hero-actions .btn-lg,
+  .hero-actions .call-link {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Botones: evitar deformación de la píldora en móvil */
+  .btn,
+  .btn-lg {
+    border-radius: var(--radius-md);
+    white-space: normal;
+    font-size: var(--fs-sm);
+    padding: 0.85rem 1.25rem;
+    line-height: 1.35;
+  }
+
+  .hero-actions .btn-lg {
+    font-size: var(--fs-sm);
+    padding: 0.9rem 1.4rem;
+  }
+
+  .hero-stats {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+
+  .section-head.is-center .eyebrow {
+    justify-content: center;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .doctors-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .why-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-band {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .cta-band-actions .btn {
+    width: 100%;
+  }
+
+  .hero-visual .badge-card {
+    display: none;
+  }
+
+  .why-us-visual .chip {
+    right: 4%;
+    bottom: 4%;
+    max-width: 170px;
+    padding: var(--space-xs) var(--space-sm);
+    gap: var(--space-xs);
+  }
+
+  .why-us-visual .chip .icon-circle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .why-us-visual .chip .icon-circle svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .floating-actions {
+    right: var(--space-sm);
+    bottom: var(--space-sm);
+  }
+
+  .floating-btn {
+    width: 48px;
+    height: 48px;
+  }
+
+  .floating-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* ----- 425px ----- */
+@media (max-width: 425px) {
+  .hero-main-logo {
+    max-width: 220px;
+  }
+
+  .nav-brand-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .nav-brand-title {
+    font-size: 1rem;
+  }
+
+  .nav-brand-sub {
+    font-size: 0.65rem;
+  }
+
+  .hero-stats .stat b {
+    font-size: var(--fs-lg);
+  }
+
+  .doctors-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-head h2 {
+    font-size: 1.5rem;
+  }
+
+  .topbar {
+    display: none;
+  }
+
+  :root {
+    --header-height: 72px;
+    --header-height-scrolled: 64px;
+  }
+}
+
+/* ----- 375px ----- */
+@media (max-width: 375px) {
+  .container {
+    padding-inline: 1rem;
+  }
+
+  .contact-form {
+    padding: var(--space-md);
+  }
+}
+
+/* ----- 320px ----- */
+@media (max-width: 320px) {
+  .hero-title {
+    font-size: 1.9rem;
+  }
+
+  .btn {
+    padding: 0.8rem 1.3rem;
+    font-size: var(--fs-xs);
+  }
+
+  .floating-actions {
+    right: var(--space-sm);
+    bottom: var(--space-sm);
+  }
+}
+
+/* ----- 1400px + (pantallas grandes) ----- */
+@media (min-width: 1400px) {
+  :root {
+    --container-width: 1320px;
+  }
+}
