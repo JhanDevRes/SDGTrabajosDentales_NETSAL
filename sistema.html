@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ===== SEO ===== -->
+    <title>Sistema de gestión de trabajos dentales | NETSAL</title>
+    <meta
+      name="description"
+      content="Simulación del sistema web de gestión y seguimiento de trabajos dentales de NETSAL: inicio de sesión por roles, panel de trabajos pendientes, órdenes, seguimiento de producción, materiales, entregas y reportes."
+    />
+    <meta name="author" content="NETSAL Laboratorio Dental Digital EIRL" />
+    <meta name="robots" content="noindex, follow" />
+    <meta name="theme-color" content="#F21D2F" />
+
+    <!-- ===== Favicon ===== -->
+    <link rel="icon" type="image/png" href="assets/logo/logo.png" />
+    <link rel="apple-touch-icon" href="assets/logo/logo.png" />
+
+    <!-- ===== Fuentes ===== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- ===== CSS ===== -->
+    <link rel="stylesheet" href="css/variables.css" />
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/contact.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="stylesheet" href="css/sistema.css" />
+  </head>
+  <body class="modo-sitio">
+    <a class="skip-link" href="#contenido-principal"
+      >Saltar al contenido principal</a
+    >
+
+    <!-- ============================================================
+         BARRA SUPERIOR
+         ============================================================ -->
+    <div class="topbar">
+      <div class="container">
+        <div class="topbar-info">
+          <a href="tel:+51984900939">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+              />
+            </svg>
+            <span>984 900 939</span>
+          </a>
+          <span>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="3" y="4" width="18" height="12" rx="1.5" />
+              <path d="M8 20h8" />
+              <path d="M12 16v4" />
+            </svg>
+            <span>Sistema de gestión de trabajos dentales</span>
+          </span>
+        </div>
+        <div class="topbar-social">
+          <a
+            href="index.html"
+            title="Volver al sitio del laboratorio"
+            aria-label="Volver al sitio del laboratorio"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M3 10.5L12 3l9 7.5" />
+              <path d="M5 9.5V21h14V9.5" />
+              <path d="M10 21v-6h4v6" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         HEADER / NAVBAR
+         ============================================================ -->
+    <header class="site-header" id="site-header">
+      <nav class="navbar container" aria-label="Navegación principal">
+        <a
+          href="index.html"
+          class="nav-brand"
+          aria-label="NETSAL Laboratorio Dental - Inicio"
+        >
+          <img
+            src="assets/logo/logo.png"
+            alt="Logo NETSAL Laboratorio Dental Digital"
+            class="nav-brand-logo"
+          />
+          <div class="nav-brand-text">
+            <span class="nav-brand-title">NETSAL</span>
+            <span class="nav-brand-sub">Laboratorio Digital Dental</span>
+          </div>
+        </a>
+
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="index.html#inicio">Inicio</a></li>
+          <li><a href="index.html#servicios">Servicios CAD/CAM</a></li>
+          <li><a href="index.html#flujo">Flujo Digital</a></li>
+          <li><a href="index.html#nosotros">Por qué elegirnos</a></li>
+          <li><a href="index.html#preguntas">FAQ</a></li>
+          <li><a href="index.html#contacto">Contacto</a></li>
+          <li>
+            <a href="sistema.html" class="is-active" aria-current="page"
+              >Acceso al sistema</a
+            >
+          </li>
+        </ul>
+
+        <button
+          class="nav-toggle"
+          id="nav-toggle"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+          aria-controls="nav-menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </nav>
+    </header>
+
+    <main id="contenido-principal">
+      <!-- ============================================================
+         PANTALLA DE INICIO DE SESIÓN
+         ============================================================ -->
+      <section
+        class="login-screen"
+        id="pantalla-login"
+        aria-label="Inicio de sesión"
+      >
+        <div class="login-visual">
+          <a
+            href="index.html"
+            class="login-brand"
+            aria-label="Ir al sitio del laboratorio"
+          >
+            <img
+              src="assets/logo/logo.png"
+              alt="Logo NETSAL Laboratorio Dental Digital"
+              width="48"
+              height="48"
+            />
+            <span>
+              <strong>NETSAL</strong>
+              <small>Laboratorio Dental Digital · Cusco</small>
+            </span>
+          </a>
+
+          <h1>Sistema web de gestión y seguimiento de trabajos dentales</h1>
+          <p>
+            Simulación del sistema propuesto para el laboratorio: cada trabajo
+            protésico se registra una sola vez y su información (cliente,
+            estado, materiales, costos y entrega) queda disponible para
+            recepción, producción y entrega.
+          </p>
+
+          <ul class="login-puntos">
+            <li>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              <span
+                ><strong>Trazabilidad</strong>Código, responsable, estado y
+                fecha de entrega por orden.</span
+              >
+            </li>
+            <li>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              <span
+                ><strong>Seguimiento</strong>Etapas: recibido, diseño, fresado,
+                horno, control y listo.</span
+              >
+            </li>
+            <li>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              <span
+                ><strong>Materiales y costos</strong>Control de stock mínimo y
+                costo por trabajo.</span
+              >
+            </li>
+            <li>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              <span
+                ><strong>Roles y permisos</strong>Cada usuario accede solo a los
+                módulos de su rol.</span
+              >
+            </li>
+          </ul>
+
+          <a href="index.html" class="login-volver"
+            >← Volver al sitio del laboratorio</a
+          >
+        </div>
+
+        <div class="login-panel">
+          <form class="login-form" id="formulario-login" novalidate>
+            <span class="eyebrow">Acceso al sistema</span>
+            <h2>Iniciar sesión</h2>
+            <p class="login-ayuda">
+              Ingresa con tu correo institucional y tu contraseña.
+            </p>
+
+            <div class="form-group">
+              <label for="login-correo">Correo electrónico</label>
+              <input
+                type="email"
+                id="login-correo"
+                name="correo"
+                placeholder="usuario@netsal.pe"
+                autocomplete="username"
+              />
+              <small class="aviso-error" id="error-login-correo"></small>
+            </div>
+
+            <div class="form-group">
+              <label for="login-clave">Contraseña</label>
+              <div class="login-clave-campo">
+                <input
+                  type="password"
+                  id="login-clave"
+                  name="clave"
+                  placeholder="••••••"
+                  autocomplete="current-password"
+                />
+                <button
+                  type="button"
+                  class="login-ojo"
+                  id="toggle-clave"
+                  aria-label="Mostrar contraseña"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                </button>
+              </div>
+              <small class="aviso-error" id="error-login-clave"></small>
+            </div>
+
+            <div class="login-opciones">
+              <label class="login-recordar">
+                <input type="checkbox" id="recordar-correo" />
+                Recordar correo
+              </label>
+              <button type="button" class="login-olvido" id="olvido-clave">
+                ¿Olvidaste tu contraseña?
+              </button>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg login-enviar">
+              Ingresar al sistema
+            </button>
+
+            <p class="login-error" id="login-error" role="alert" hidden></p>
+
+            <div class="login-demo">
+              <h3>Usuarios de demostración</h3>
+              <p>
+                El prototipo no usa base de datos. Elige un perfil para cargar
+                sus credenciales; la contraseña es <strong>123456</strong>.
+              </p>
+              <div class="login-demo-grid" id="login-demo-grid"></div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ============================================================
+         PANEL DEL SISTEMA
+         ============================================================ -->
+      <div class="sis-app" id="panel-sistema" hidden>
+        <header class="sis-topbar">
+          <button
+            type="button"
+            class="sis-menu-btn"
+            id="sis-menu-btn"
+            aria-label="Abrir menú de módulos"
+            aria-expanded="false"
+            aria-controls="sis-menu"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </button>
+
+          <a
+            href="index.html"
+            class="sis-brand"
+            aria-label="Ir al sitio del laboratorio"
+          >
+            <img
+              src="assets/logo/logo.png"
+              alt="Logo NETSAL"
+              width="36"
+              height="36"
+            />
+            <strong>NETSAL</strong>
+          </a>
+
+          <span class="sis-topbar-titulo"
+            >Sistema de gestión de trabajos dentales</span
+          >
+
+          <div class="sis-usuario">
+            <span class="sis-avatar" id="sis-avatar" aria-hidden="true"></span>
+            <span class="sis-usuario-datos">
+              <strong id="sis-usuario-nombre"></strong>
+              <small id="sis-usuario-rol"></small>
+            </span>
+            <button type="button" class="sis-salir" id="boton-salir">
+              Cerrar sesión
+            </button>
+          </div>
+        </header>
+
+        <div class="sis-cuerpo">
+          <aside class="sis-menu" id="sis-menu">
+            <nav aria-label="Módulos del sistema">
+              <ul id="sis-lista-modulos"></ul>
+            </nav>
+            <p class="sis-menu-nota">
+              Prototipo académico · Datos simulados en el navegador.
+              <button type="button" class="sis-reset" id="boton-reset">
+                Restablecer datos demo
+              </button>
+            </p>
+          </aside>
+
+          <main class="sis-contenido" id="contenido-sistema">
+            <div id="vista-sistema"></div>
+          </main>
+        </div>
+
+        <button
+          type="button"
+          class="sis-menu-fondo"
+          id="sis-menu-fondo"
+          aria-label="Cerrar menú de módulos"
+          tabindex="-1"
+        ></button>
+      </div>
+    </main>
+
+    <!-- ============================================================
+         FOOTER
+         ============================================================ -->
+    <footer class="site-footer" role="contentinfo">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <img
+              src="assets/logo/logo.png"
+              alt="Logo NETSAL Laboratorio Dental Digital"
+              width="60"
+              height="60"
+              loading="lazy"
+            />
+            <p>
+              NETSAL – Laboratorio Dental Digital &amp; Centro de Fresado
+              CAD/CAM. Prototipo del sistema web de gestión y seguimiento de
+              trabajos dentales para odontólogos y clínicas.
+            </p>
+            <div class="footer-social">
+              <a
+                href="https://www.facebook.com/laboratorionetsal/"
+                target="_blank"
+                rel="noopener"
+                aria-label="Facebook NETSAL Laboratorio Dental"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
+                  />
+                </svg>
+              </a>
+              <a
+                href="https://www.instagram.com/netsal_cusco"
+                target="_blank"
+                rel="noopener"
+                aria-label="Instagram NETSAL Laboratorio Dental"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                </svg>
+              </a>
+              <a
+                href="https://www.tiktok.com/@lab.netsal"
+                target="_blank"
+                rel="noopener"
+                aria-label="TikTok NETSAL Laboratorio Dental"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"
+                  />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="footer-col">
+            <h4>Módulos del sistema</h4>
+            <ul class="footer-links">
+              <li><a href="sistema.html">Panel principal</a></li>
+              <li><a href="sistema.html">Órdenes de trabajo</a></li>
+              <li><a href="sistema.html">Seguimiento de producción</a></li>
+              <li><a href="sistema.html">Clientes</a></li>
+              <li><a href="sistema.html">Materiales e inventario</a></li>
+              <li><a href="sistema.html">Entregas y reportes</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Sitio web</h4>
+            <ul class="footer-links">
+              <li><a href="index.html#inicio">Inicio</a></li>
+              <li><a href="index.html#servicios">Servicios CAD/CAM</a></li>
+              <li><a href="index.html#galeria">Portafolio</a></li>
+              <li><a href="index.html#acerca">La Empresa</a></li>
+              <li><a href="index.html#preguntas">Preguntas Frecuentes</a></li>
+              <li><a href="index.html#contacto">Contacto</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Contacto Laboratorio</h4>
+            <ul class="footer-contact-list">
+              <li class="footer-contact-item">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+                <span
+                  >JR. Union C-4 (4to piso) – Entrada al Molino, Cusco,
+                  Perú</span
+                >
+              </li>
+              <li class="footer-contact-item">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                  />
+                </svg>
+                <a href="tel:+51984900939">984 900 939</a>
+              </li>
+              <li class="footer-contact-item">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                  />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+                <a href="mailto:contacto@netsaldental.pe"
+                  >contacto@netsaldental.pe</a
+                >
+              </li>
+              <li class="footer-contact-item">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+                <span
+                  >Lunes a viernes: 8:30 am - 7:30 pm<br />Sábados: 8:30 am -
+                  1:30 pm</span
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>
+            © <span id="anio-sistema"></span> NETSAL – Laboratorio Dental
+            Digital. Todos los derechos reservados. Prototipo académico.
+          </p>
+          <div class="footer-legal">
+            <a href="index.html">Volver al sitio</a>
+            <a href="index.html#contacto">Soporte al odontólogo</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ============================================================
+         MODAL (DETALLE DE ORDEN / NUEVA ORDEN)
+         ============================================================ -->
+    <div
+      class="sis-modal"
+      id="modal-sistema"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Detalle de la orden de trabajo"
+    >
+      <div class="sis-modal-caja" id="modal-sistema-contenido"></div>
+    </div>
+
+    <!-- ============================================================
+         AVISOS EMERGENTES
+         ============================================================ -->
+    <div
+      class="contenedor-toast"
+      id="contenedor-toast"
+      role="status"
+      aria-live="polite"
+    ></div>
+
+    <script src="js/sistema.js"></script>
+  </body>
+</html>
