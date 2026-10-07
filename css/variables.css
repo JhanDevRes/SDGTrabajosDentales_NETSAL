@@ -1,0 +1,80 @@
+/* ============================================================
+   css/variables.css  — NETSAL Laboratorio Dental Digital
+   Paleta Clean & Bold: blanco + rojo sólido + azul corporativo
+   ============================================================ */
+
+:root {
+  /* ===== Colores ===== */
+  --color-primary:      #F21D2F;
+  --color-primary-dark: #C71222;
+  --color-primary-light:#FF4D5E;
+  --color-secondary:    #1B65A6;
+  --color-secondary-dk: #124B7D;
+  --color-accent-soft:  rgba(242, 29, 47, 0.09);
+  --color-blue-soft:    rgba(27, 101, 166, 0.09);
+
+  --color-dark:   #0D0D0D;
+  --color-dark2:  #1A1A1A;
+  --color-dark3:  #252525;
+  --color-text:   #0D0D0D;
+  --color-text-muted: #5A6070;
+  --color-gray:   #F5F5F7;
+  --color-gray2:  #EBEBED;
+  --color-white:  #FFFFFF;
+  --color-border: #E0E0E4;
+
+  /* ===== Tipografía ===== */
+  --font-body:    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* ===== Tamaños fuente (fluid) ===== */
+  --fs-xs:   0.8125rem;
+  --fs-sm:   0.9375rem;
+  --fs-md:   1.0625rem;
+  --fs-lg:   1.25rem;
+  --fs-xl:   1.5rem;
+  --fs-2xl:  1.875rem;
+  --fs-3xl:  2.375rem;
+  --fs-4xl:  3rem;
+  --fs-5xl:  3.75rem;
+
+  /* ===== Espaciado ===== */
+  --space-xs:  0.5rem;
+  --space-sm:  0.875rem;
+  --space-md:  1.5rem;
+  --space-lg:  2.25rem;
+  --space-xl:  4rem;
+  --space-2xl: 6rem;
+
+  /* ===== Layout ===== */
+  --container-width:   1240px;
+  --container-pad:     1.5rem;
+  --header-height:     76px;
+  --header-height-scrolled: 64px;
+  --section-padding:   5.5rem;
+
+  /* ===== Radios ===== */
+  --radius-sm:   8px;
+  --radius-md:   14px;
+  --radius-lg:   24px;
+  --radius-xl:   40px;
+  --radius-full: 999px;
+
+  /* ===== Sombras ===== */
+  --shadow-xs: 0 1px 4px rgba(0,0,0,0.06);
+  --shadow-sm: 0 3px 12px rgba(0,0,0,0.08);
+  --shadow-md: 0 8px 28px rgba(0,0,0,0.12);
+  --shadow-lg: 0 20px 56px rgba(0,0,0,0.16);
+  --shadow-red: 0 12px 32px rgba(242,29,47,0.25);
+
+  /* ===== Transiciones ===== */
+  --transition-fast: 0.18s ease;
+  --transition-base: 0.32s ease;
+  --transition-slow: 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ===== Z-index ===== */
+  --z-fixed:    100;
+  --z-header:   200;
+  --z-modal:    300;
+  --z-floating: 195;
+}
