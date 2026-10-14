@@ -74,7 +74,7 @@
   position: relative;
   border-radius: var(--radius-lg);
   padding: var(--space-xl) var(--space-lg);
-  background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 50%, var(--color-secondary) 100%);
+  background: var(--color-primary);
   color: var(--color-white);
   display: flex;
   align-items: center;
@@ -83,7 +83,6 @@
   flex-wrap: wrap;
   overflow: hidden;
   box-shadow: 0 24px 60px rgba(13, 13, 13, 0.35);
-  background: linear-gradient(135deg, #0D0D0D 0%, #1a1a1a 50%, var(--color-primary) 100%);
 }
 
 .cta-band::before {

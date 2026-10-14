@@ -12,7 +12,7 @@
   left: 0;
   width: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  background: var(--color-primary);
   z-index: 500;
   transition: width 0.1s linear;
 }
@@ -295,11 +295,7 @@
   padding: 0;
   border: none;
   border-radius: var(--radius-full);
-  background: linear-gradient(
-    90deg,
-    var(--color-primary) var(--porcentaje, 0%),
-    var(--color-border) var(--porcentaje, 0%)
-  );
+  background: var(--color-border);
   box-shadow: none;
   cursor: pointer;
 }

@@ -20,8 +20,13 @@
   --color-text-muted: #5A6070;
   --color-gray:   #F5F5F7;
   --color-gray2:  #EBEBED;
-  --color-white:  #FFFFFF;
-  --color-border: #E0E0E4;
+  --color-white:    #FFFFFF;
+  --color-border:   #E0E0E4;
+
+  /* ===== Alias de color ===== */
+  --color-red-line: #F21D2F;
+  --color-red-soft: #FFF5F5;
+  --color-blue:     #1B65A6;
 
   /* ===== Tipografía ===== */
   --font-body:    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
