@@ -798,7 +798,7 @@
       orden.historial
         .map(function (registro) {
           return (
-            '<li class="hecho"><span class="timeline-punto">✓</span>' +
+            '<li class="hecho"><span class="timeline-punto">OK</span>' +
             '<span class="timeline-detalle"><strong>' + nombreEtapa(registro.estado) + "</strong>" +
             "<span>" + formatoFecha(registro.fecha) + " · " + registro.usuario + "</span></span></li>"
           );

@@ -82,7 +82,7 @@
     if (!contenedorToast) return null;
 
     var claseTipo = tipo === "error" ? "toast-error" : tipo === "info" ? "toast-info" : "toast-exito";
-    var icono = tipo === "error" ? "✖" : tipo === "info" ? "ℹ" : "✔";
+    var icono = tipo === "error" ? "Error" : tipo === "info" ? "Info" : "OK";
 
     var aviso = document.createElement("div");
     aviso.className = "toast " + claseTipo;

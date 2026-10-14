@@ -42,10 +42,7 @@ body.modo-app .site-footer {
   flex-direction: column;
   gap: var(--space-md);
   padding: var(--space-xl) var(--space-lg);
-  background:
-    radial-gradient(circle at 85% 15%, rgba(242, 29, 47, 0.35), transparent 55%),
-    radial-gradient(circle at 10% 90%, rgba(27, 101, 166, 0.4), transparent 55%),
-    linear-gradient(160deg, #0d0d0d 0%, #14171d 60%, #1a1a1a 100%);
+  background: var(--color-dark);
   color: rgba(255, 255, 255, 0.82);
 }
 
@@ -338,7 +335,7 @@ body.modo-app .site-footer {
   align-items: center;
   gap: var(--space-sm);
   padding: 0.7rem var(--space-md);
-  background: linear-gradient(180deg, #14171d 0%, var(--color-dark) 100%);
+  background: var(--color-dark);
   color: rgba(255, 255, 255, 0.85);
   position: sticky;
   top: 0;
@@ -352,7 +349,7 @@ body.modo-app .site-footer {
   left: 0;
   width: 100%;
   height: 3px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  background: var(--color-primary);
 }
 
 .sis-brand {
@@ -956,7 +953,7 @@ body.modo-app .site-footer {
 .barra-relleno {
   height: 100%;
   border-radius: var(--radius-full);
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  background: var(--color-primary);
 }
 
 .barra-valor {

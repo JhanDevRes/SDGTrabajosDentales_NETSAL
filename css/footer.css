@@ -4,7 +4,7 @@
    ============================================================ */
 
 .site-footer {
-  background: linear-gradient(180deg, #14171D 0%, var(--color-dark) 100%);
+  background: var(--color-dark);
   color: rgba(255, 255, 255, 0.82);
   padding-top: var(--space-2xl);
   position: relative;
@@ -17,15 +17,8 @@
   left: 0;
   width: 100%;
   height: 3px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary), var(--color-blue));
-  background-size: 200% 100%;
-  animation: footer-gradient 6s linear infinite;
+  background: var(--color-primary);
   opacity: 0.85;
-}
-
-@keyframes footer-gradient {
-  0% { background-position: 0% 0%; }
-  100% { background-position: 200% 0%; }
 }
 
 .footer-grid {

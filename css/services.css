@@ -36,7 +36,7 @@
   left: 0;
   width: 100%;
   height: 3px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary), var(--color-red-line));
+  background: var(--color-primary);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform var(--transition-base);
@@ -56,7 +56,7 @@
   width: 56px;
   height: 56px;
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, var(--color-accent-soft) 0%, rgba(242, 29, 47, 0.06) 100%);
+  background: var(--color-accent-soft);
   color: var(--color-primary);
   display: grid;
   place-items: center;
@@ -70,7 +70,7 @@
 }
 
 .service-card:hover .service-icon {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  background: var(--color-primary);
   color: var(--color-white);
   transform: scale(1.1) rotate(-6deg);
   box-shadow: 0 8px 20px rgba(242, 29, 47, 0.25);
@@ -154,7 +154,7 @@
   position: absolute;
   right: -6%;
   bottom: 8%;
-  background: linear-gradient(135deg, var(--color-white) 0%, #FFF5F5 100%);
+  background: var(--color-white);
   border-radius: var(--radius-md);
   box-shadow: 0 16px 36px rgba(242, 29, 47, 0.16);
   padding: var(--space-md);
