@@ -2,6 +2,17 @@
 
 Aplicación desarrollada en **Laravel 12** con arquitectura **MVC**, base de datos relacional y vistas **Blade** con Bootstrap 5. Forma parte del proyecto del curso de Programación Web para el Laboratorio Dental NETSAL (Cusco).
 
+## Autores
+
+| Integrante | Correo institucional |
+| --- | --- |
+| Vargas Cusi Jhande Emanuel | 76553002@continental.edu.pe |
+| Cortez Huaman Mehul Dhruval | 61202602@continental.edu.pe |
+| Luna Urquizo Javier Enrique | 61057682@continental.edu.pe |
+
+**Curso:** Programación Web — Universidad Continental
+**Docente:** Mg. Alfredo Collantes Mendoza
+
 ## Módulos implementados
 
 | Módulo | Descripción |
