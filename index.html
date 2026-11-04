@@ -241,30 +241,6 @@
           <button
             type="button"
             class="topbar-tool"
-            id="boton-bienvenida"
-            aria-label="Mostrar saludo de bienvenida"
-            title="Saludo de bienvenida"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M18 11V6a2 2 0 0 0-4 0v5" />
-              <path d="M14 10V4a2 2 0 0 0-4 0v6" />
-              <path d="M10 10.5V6a2 2 0 0 0-4 0v8" />
-              <path
-                d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2a8 8 0 0 1-8-8v-1a2 2 0 0 1 4 0"
-              />
-            </svg>
-          </button>
-          <button
-            type="button"
-            class="topbar-tool"
             id="boton-tema"
             aria-pressed="false"
             aria-label="Cambiar a tema oscuro"
@@ -338,7 +314,6 @@
           <li><a href="#tercera-edad">Programa Adultos Mayores</a></li>
           <li><a href="#testimonios">Odontólogos Socios</a></li>
           <li><a href="#preguntas">FAQ</a></li>
-          <li><a href="sistema/public/">Acceso al sistema</a></li>
         </ul>
 
         <button
@@ -918,88 +893,6 @@
       </section>
 
       <!-- ============================================================
-         ESTIMADOR DE PRESUPUESTO CAD/CAM (PROTOTIPO)
-         ============================================================ -->
-      <section
-        class="section estimador"
-        id="presupuesto"
-        aria-label="Estimador de presupuesto CAD/CAM"
-      >
-        <div class="container">
-          <div class="section-head is-center">
-            <span class="eyebrow">Herramienta del Prototipo</span>
-            <h2>Estimador de Presupuesto CAD/CAM</h2>
-            <p>
-              Calcula un monto referencial según el tipo de restauración y el
-              número de piezas del caso. El presupuesto final se confirma con el
-              equipo técnico tras evaluar el trabajo.
-            </p>
-          </div>
-          <div class="estimador-panel">
-            <div class="estimador-campos">
-              <div class="form-group">
-                <label for="tipo-trabajo">Tipo de restauración</label>
-                <select id="tipo-trabajo">
-                  <option data-precio="180">
-                    Zirconio Multicapa (Coronas / Puentes)
-                  </option>
-                  <option data-precio="220">
-                    Disilicato de Litio (E.max / Carillas)
-                  </option>
-                  <option data-precio="950">
-                    Barras de Titanio DMLS / Prótesis Híbrida
-                  </option>
-                  <option data-precio="350">
-                    Guía Quirúrgica 3D (Cirugía Guiada)
-                  </option>
-                  <option data-precio="280">PEEK Dental / Subestructura</option>
-                  <option data-precio="120">
-                    Alineadores / Placas Miorelajantes
-                  </option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="numero-piezas">Número de piezas del caso</label>
-                <input
-                  type="range"
-                  id="numero-piezas"
-                  min="1"
-                  max="20"
-                  step="1"
-                  value="1"
-                />
-                <div class="estimador-rango-info">
-                  <span><strong id="valor-piezas">1</strong> pieza(s)</span>
-                  <span>Máximo 20 piezas por lote</span>
-                </div>
-              </div>
-              <p class="form-note">
-                Herramienta demostrativa del prototipo: los valores son
-                referenciales y no constituyen una cotización formal.
-              </p>
-            </div>
-            <div class="estimador-resultado">
-              <span class="estimador-etiqueta">Total referencial</span>
-              <strong class="estimador-total" id="total-presupuesto"
-                >S/ 180</strong
-              >
-              <button
-                type="button"
-                class="btn btn-primary btn-lg"
-                id="agendar-presupuesto"
-              >
-                Cargar en el formulario de contacto
-              </button>
-              <p class="estimador-nota">
-                No incluye caracterización adicional, pruebas intermedias ni
-                envío.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============================================================
          CONTACTO / FORMULARIO DE RECEPCIÓN DE CASOS
          ============================================================ -->
       <section
@@ -1225,7 +1118,6 @@
               <li><a href="#tecnologia">Equipos y Tecnología</a></li>
               <li><a href="#testimonios">Odontólogos Socios</a></li>
               <li><a href="#preguntas">Preguntas Frecuentes</a></li>
-              <li><a href="sistema/public/">Acceso al sistema (Laravel)</a></li>
             </ul>
           </div>
 
@@ -1421,52 +1313,6 @@
       role="status"
       aria-live="polite"
     ></div>
-
-    <!-- ============================================================
-       MODAL DE BIENVENIDA (PROTOTIPO)
-       ============================================================ -->
-    <div
-      class="modal-bienvenida"
-      id="modal-bienvenida"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="titulo-bienvenida"
-    >
-      <div class="modal-bienvenida-contenido">
-        <button
-          type="button"
-          class="boton-cerrar-modal"
-          id="cerrar-modal"
-          aria-label="Cerrar mensaje de bienvenida"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <span class="modal-bienvenida-eyebrow"
-          >NETSAL · Laboratorio Dental Digital</span
-        >
-        <h2 id="titulo-bienvenida">Bienvenido al prototipo del sistema</h2>
-        <p class="texto-saludo" id="texto-saludo"></p>
-        <form id="formulario-bienvenida" novalidate>
-          <div class="form-group">
-            <label for="nombre-visitante">¿Cómo te llamas?</label>
-            <input
-              type="text"
-              id="nombre-visitante"
-              name="nombre-visitante"
-              placeholder="Dr. / Dra. / Clínica Dental"
-              autocomplete="name"
-            />
-            <small class="aviso-error" id="error-nombre"></small>
-          </div>
-          <button type="submit" class="btn btn-primary btn-lg">
-            Ingresar al sitio
-          </button>
-          <button type="button" class="boton-texto" id="omitir-bienvenida">
-            Prefiero explorar sin registrarme
-          </button>
-        </form>
-      </div>
-    </div>
 
     <!-- ============================================================
        BOTONES FLOTANTES

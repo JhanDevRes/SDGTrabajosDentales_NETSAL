@@ -1,8 +1,8 @@
 /* ============================================================
    js/interactivo.js
-   Capa de dinamismo del prototipo NETSAL: reloj, tema claro/oscuro,
-   avisos emergentes, modal de bienvenida, progreso de lectura,
-   validaciones del formulario y estimador de presupuesto CAD/CAM.
+   Dinamismo del sitio: reloj de la barra superior, tema claro/oscuro,
+   avisos emergentes, progreso de lectura, aviso de horario del día y
+   validación del formulario de contacto.
    ============================================================ */
 
 (function () {
@@ -13,17 +13,9 @@
   var raiz = document.documentElement;
   var reloj = document.getElementById("reloj");
   var botonTema = document.getElementById("boton-tema");
-  var botonBienvenida = document.getElementById("boton-bienvenida");
   var botonSubir = document.getElementById("back-to-top");
   var barraProgreso = document.getElementById("barra-progreso");
   var contenedorToast = document.getElementById("contenedor-toast");
-  var modalBienvenida = document.getElementById("modal-bienvenida");
-  var formularioBienvenida = document.getElementById("formulario-bienvenida");
-  var nombreVisitante = document.getElementById("nombre-visitante");
-  var errorNombre = document.getElementById("error-nombre");
-  var textoSaludo = document.getElementById("texto-saludo");
-  var cerrarModal = document.getElementById("cerrar-modal");
-  var omitirBienvenida = document.getElementById("omitir-bienvenida");
   var formularioContacto = document.getElementById("contact-form");
   var campoNombre = document.getElementById("contact-name");
   var campoTelefono = document.getElementById("contact-phone");
@@ -32,19 +24,10 @@
   var campoMensaje = document.getElementById("contact-message");
   var contadorMensaje = document.getElementById("contador-mensaje");
   var notaHorarioDia = document.getElementById("nota-horario-dia");
-  var selectTrabajo = document.getElementById("tipo-trabajo");
-  var rangoPiezas = document.getElementById("numero-piezas");
-  var valorPiezas = document.getElementById("valor-piezas");
-  var totalPresupuesto = document.getElementById("total-presupuesto");
-  var botonAgendarPresupuesto = document.getElementById("agendar-presupuesto");
   var enlacesContacto = document.querySelectorAll('a[href="#contacto"]');
   var camposContacto = [campoNombre, campoTelefono, campoCorreo, campoMensaje];
 
-  var formatoMoneda = new Intl.NumberFormat("es-PE", {
-    style: "currency",
-    currency: "PEN",
-    maximumFractionDigits: 0
-  });
+  /* ---------- Reloj y fecha ---------- */
 
   function obtenerSaludo() {
     var hora = new Date().getHours();
@@ -53,17 +36,9 @@
     return "Buenas noches";
   }
 
-  function formatearFecha() {
-    return new Date().toLocaleDateString("es-PE", {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric"
-    });
-  }
-
   function actualizarReloj() {
     if (!reloj) return;
+
     var ahora = new Date();
     var hora = ahora.toLocaleTimeString("es-PE", {
       hour: "2-digit",
@@ -75,8 +50,11 @@
       day: "2-digit",
       month: "short"
     });
+
     reloj.textContent = fecha + " · " + hora;
   }
+
+  /* ---------- Avisos emergentes ---------- */
 
   function mostrarToast(mensaje, tipo) {
     if (!contenedorToast) return null;
@@ -104,33 +82,7 @@
     return aviso;
   }
 
-  function guardarNombre(nombre) {
-    sessionStorage.setItem("netsalVisitante", nombre);
-  }
-
-  function obtenerNombreGuardado() {
-    return sessionStorage.getItem("netsalVisitante") || "";
-  }
-
-  function abrirBienvenida() {
-    if (!modalBienvenida) return;
-    modalBienvenida.classList.add("abierto");
-    document.body.classList.add("modal-abierto");
-
-    var nombre = obtenerNombreGuardado();
-    if (nombre && nombreVisitante) nombreVisitante.value = nombre;
-
-    window.setTimeout(function () {
-      if (nombreVisitante) nombreVisitante.focus();
-    }, 320);
-  }
-
-  function cerrarBienvenida() {
-    if (!modalBienvenida) return;
-    modalBienvenida.classList.remove("abierto");
-    document.body.classList.remove("modal-abierto");
-    sessionStorage.setItem("netsalBienvenida", "visto");
-  }
+  /* ---------- Tema claro / oscuro ---------- */
 
   function aplicarTema(tema) {
     var oscuro = tema === "oscuro";
@@ -155,6 +107,8 @@
     mostrarToast(nuevo === "oscuro" ? "Cambiaste al tema oscuro" : "Cambiaste al tema claro", "info");
   }
 
+  /* ---------- Validación del formulario de contacto ---------- */
+
   function marcarCampoError(campo, mensaje) {
     if (!campo) return;
     campo.classList.add("campo-invalido");
@@ -176,7 +130,7 @@
     campo.classList.remove("campo-invalido");
 
     var aviso = campo.parentElement.querySelector(".aviso-error");
-    if (aviso && aviso.id !== "error-nombre") aviso.remove();
+    if (aviso) aviso.remove();
   }
 
   function validarCorreo(correo) {
@@ -239,57 +193,7 @@
     contadorMensaje.classList.toggle("contador-limite", total >= LIMITE_MENSAJE);
   }
 
-  function calcularPresupuesto() {
-    if (!selectTrabajo || !rangoPiezas) return null;
-
-    var opcion = selectTrabajo.selectedOptions[0];
-    var cantidad = Number(rangoPiezas.value);
-    var precio = Number(opcion.dataset.precio || 0);
-    var total = cantidad * precio;
-
-    if (valorPiezas) valorPiezas.textContent = cantidad;
-    if (totalPresupuesto) totalPresupuesto.textContent = formatoMoneda.format(total);
-
-    var minimo = Number(rangoPiezas.min);
-    var maximo = Number(rangoPiezas.max);
-    var porcentaje = maximo > minimo ? ((cantidad - minimo) / (maximo - minimo)) * 100 : 0;
-    rangoPiezas.style.setProperty("--porcentaje", porcentaje + "%");
-
-    return {
-      cantidad: cantidad,
-      precio: precio,
-      total: total,
-      tipo: opcion.textContent.trim()
-    };
-  }
-
-  function agendarConPresupuesto() {
-    var resultado = calcularPresupuesto();
-    if (!resultado) return;
-
-    var destino = document.getElementById("contacto");
-    if (destino) destino.scrollIntoView({ behavior: "smooth" });
-
-    window.setTimeout(function () {
-      if (campoAsunto) {
-        var coincidencia = Array.prototype.find.call(campoAsunto.options, function (opcion) {
-          return opcion.textContent.trim() === resultado.tipo;
-        });
-        if (coincidencia) campoAsunto.value = coincidencia.value;
-      }
-
-      if (campoMensaje) {
-        campoMensaje.value =
-          "Estimación referencial del prototipo: " + resultado.cantidad + " × " + resultado.tipo +
-          ". Total aproximado " + formatoMoneda.format(resultado.total) +
-          ". Solicito la confirmación del presupuesto final.";
-        actualizarContadorMensaje();
-      }
-
-      if (campoNombre) campoNombre.focus({ preventScroll: true });
-      mostrarToast("Presupuesto referencial cargado en el formulario", "info");
-    }, 700);
-  }
+  /* ---------- Aviso de horario del día ---------- */
 
   function resaltarHorarioHoy() {
     if (!notaHorarioDia) return;
@@ -313,6 +217,8 @@
     notaHorarioDia.textContent = "Hoy es " + nombreDia + ". Horario de atención: " + horario;
   }
 
+  /* ---------- Barra de progreso de lectura ---------- */
+
   function actualizarProgreso() {
     if (!barraProgreso) return;
     var alturaTotal = document.documentElement.scrollHeight - window.innerHeight;
@@ -320,73 +226,11 @@
     barraProgreso.style.width = progreso + "%";
   }
 
-  function iniciarBienvenida() {
-    if (textoSaludo) {
-      textoSaludo.textContent =
-        obtenerSaludo() + ". Hoy es " + formatearFecha() +
-        ". Nos alegra que visites el prototipo de nuestro laboratorio dental digital. " +
-        "Cuéntanos tu nombre para atenderte mejor.";
-    }
-
-    if (sessionStorage.getItem("netsalBienvenida") === "visto") {
-      var nombre = obtenerNombreGuardado();
-      if (nombre) {
-        window.setTimeout(function () {
-          mostrarToast(obtenerSaludo() + ", " + nombre + ". ¡Bienvenido de nuevo a NETSAL!", "info");
-        }, 700);
-      }
-      return;
-    }
-
-    window.setTimeout(abrirBienvenida, 900);
-  }
+  /* ---------- Registro de eventos ---------- */
 
   function iniciarEventos() {
     if (botonTema) botonTema.addEventListener("click", alternarTema);
     aplicarTema(localStorage.getItem("netsalTema") || "claro");
-
-    if (botonBienvenida) {
-      botonBienvenida.addEventListener("click", function () {
-        abrirBienvenida();
-        mostrarToast("Aquí tienes de nuevo el mensaje de bienvenida", "info");
-      });
-    }
-
-    if (cerrarModal) cerrarModal.addEventListener("click", cerrarBienvenida);
-    if (omitirBienvenida) omitirBienvenida.addEventListener("click", cerrarBienvenida);
-
-    if (modalBienvenida) {
-      modalBienvenida.addEventListener("click", function (evento) {
-        if (evento.target === modalBienvenida) cerrarBienvenida();
-      });
-    }
-
-    if (formularioBienvenida) {
-      formularioBienvenida.addEventListener("submit", function (evento) {
-        evento.preventDefault();
-
-        var nombre = nombreVisitante ? nombreVisitante.value.trim() : "";
-        if (nombre.length < 2) {
-          if (nombreVisitante) nombreVisitante.classList.add("campo-invalido");
-          if (errorNombre) errorNombre.textContent = "Escribe tu nombre para saludarte mejor.";
-          if (nombreVisitante) nombreVisitante.focus();
-          return;
-        }
-
-        if (nombreVisitante) nombreVisitante.classList.remove("campo-invalido");
-        if (errorNombre) errorNombre.textContent = "";
-        guardarNombre(nombre);
-        cerrarBienvenida();
-        mostrarToast(obtenerSaludo() + ", " + nombre + ". ¡Bienvenido a NETSAL!", "exito");
-      });
-    }
-
-    if (nombreVisitante) {
-      nombreVisitante.addEventListener("input", function () {
-        nombreVisitante.classList.remove("campo-invalido");
-        if (errorNombre) errorNombre.textContent = "";
-      });
-    }
 
     if (botonSubir) {
       botonSubir.addEventListener("click", function () {
@@ -422,26 +266,6 @@
       });
     });
 
-    if (selectTrabajo) {
-      selectTrabajo.addEventListener("change", function () {
-        var resultado = calcularPresupuesto();
-        if (resultado) mostrarToast("Restauración: " + resultado.tipo, "info");
-      });
-      calcularPresupuesto();
-    }
-
-    if (rangoPiezas) {
-      rangoPiezas.addEventListener("input", calcularPresupuesto);
-      rangoPiezas.addEventListener("change", function () {
-        var resultado = calcularPresupuesto();
-        if (resultado) mostrarToast("Seleccionaste " + resultado.cantidad + " pieza(s)", "info");
-      });
-    }
-
-    if (botonAgendarPresupuesto) {
-      botonAgendarPresupuesto.addEventListener("click", agendarConPresupuesto);
-    }
-
     window.addEventListener("scroll", actualizarProgreso, { passive: true });
     window.addEventListener("resize", actualizarProgreso);
 
@@ -449,7 +273,6 @@
     window.setInterval(actualizarReloj, 1000);
     actualizarProgreso();
     resaltarHorarioHoy();
-    iniciarBienvenida();
   }
 
   document.addEventListener("DOMContentLoaded", iniciarEventos);
