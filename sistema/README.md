@@ -55,10 +55,9 @@ Las migraciones están en [database/migrations](./database/migrations).
 
 ## Optimización de consultas (semana 11)
 
-La capa de acceso a datos fue optimizada siguiendo las técnicas de la sesión. El detalle
-completo, con código comparado y mediciones, está en
-[docs/OPTIMIZACION_CONSULTAS.md](./docs/OPTIMIZACION_CONSULTAS.md) (también en Word:
-`docs/OPTIMIZACION_CONSULTAS.docx`).
+La capa de acceso a datos fue optimizada siguiendo las técnicas de la sesión: eager loading,
+selección explícita de columnas, query scopes, agregación en la base de datos, índices
+compuestos y caché con invalidación automática.
 
 | Técnica | Dónde se aplica |
 | --- | --- |

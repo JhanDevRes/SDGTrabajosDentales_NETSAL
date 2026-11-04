@@ -95,10 +95,6 @@ php artisan netsal:diagnostico     # índices, EXPLAIN y comparación N+1
 php artisan netsal:reporte-costos  # exportación por lotes
 ```
 
-El informe completo, con el código comparado y las mediciones antes/después, está en
-[sistema/docs/OPTIMIZACION_CONSULTAS.md](sistema/docs/OPTIMIZACION_CONSULTAS.md)
-(versión Word: `sistema/docs/OPTIMIZACION_CONSULTAS.docx`).
-
 ## Cómo ejecutar el sistema
 
 Requisitos: PHP 8.2+, Composer y MySQL/MariaDB (por ejemplo, el MySQL de XAMPP).
@@ -136,5 +132,3 @@ php artisan serve
 | Documento | Contenido |
 | --- | --- |
 | [sistema/README.md](sistema/README.md) | Módulos, roles, modelo de datos y puesta en marcha |
-| [sistema/docs/OPTIMIZACION_CONSULTAS.md](sistema/docs/OPTIMIZACION_CONSULTAS.md) | Informe técnico de optimización de consultas |
-| `sistema/docs/OPTIMIZACION_CONSULTAS.docx` | Misma información en formato Word |
