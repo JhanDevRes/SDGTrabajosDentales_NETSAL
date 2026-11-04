@@ -1,0 +1,640 @@
+/* ============================================================================
+   NETSAL - Sistema de gestión de trabajos dentales
+   Hoja de estilos del panel administrativo.
+
+   Organización del archivo:
+     1. Tokens de diseño (colores, tipografía, medidas)
+     2. Estructura general (barra lateral, cabecera, contenido)
+     3. Componentes (tarjetas, tablas, distintivos, línea de tiempo)
+     4. Formularios y botones
+     5. Pantalla de acceso
+     6. Adaptación a dispositivos móviles
+     7. Impresión de reportes
+
+   Criterio visual: superficies planas, una sola familia tipográfica, paleta
+   institucional de tres tonos (azul corporativo, azul marino y neutros) y
+   colores semánticos únicamente para estados del proceso.
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   1. Tokens de diseño
+   ---------------------------------------------------------------------------- */
+
+:root {
+    /* Azul corporativo (marca) */
+    --c-brand-900: #102a43;
+    --c-brand-800: #16395c;
+    --c-brand-700: #1b65a6;
+    --c-brand-600: #17548a;
+    --c-brand-100: #eaf1f8;
+
+    /* Neutros */
+    --c-ink: #16202b;
+    --c-ink-soft: #46536b;
+    --c-muted: #667388;
+    --c-line: #d9e1ea;
+    --c-line-soft: #e8edf3;
+    --c-surface: #ffffff;
+    --c-canvas: #f5f7fa;
+
+    /* Semánticos: solo para estados y avisos */
+    --c-success: #1f7a4d;
+    --c-success-bg: #e7f4ec;
+    --c-warning: #8a5a00;
+    --c-warning-bg: #fcf2df;
+    --c-danger: #a12626;
+    --c-danger-bg: #fbeaea;
+    --c-info: #1b65a6;
+    --c-info-bg: #eaf1f8;
+
+    /* Medidas */
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --shadow-1: 0 1px 2px rgba(16, 42, 67, 0.06);
+    --shadow-2: 0 2px 8px rgba(16, 42, 67, 0.08);
+    --sidebar-width: 248px;
+
+    /* Integración con Bootstrap */
+    --bs-primary: #1b65a6;
+    --bs-primary-rgb: 27, 101, 166;
+    --bs-body-color: #16202b;
+    --bs-body-bg: #f5f7fa;
+    --bs-border-color: #d9e1ea;
+}
+
+/* ----------------------------------------------------------------------------
+   2. Estructura general
+   ---------------------------------------------------------------------------- */
+
+body {
+    background-color: var(--c-canvas);
+    color: var(--c-ink);
+    font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 0.9375rem;
+    -webkit-font-smoothing: antialiased;
+}
+
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Barra lateral: fondo plano, sin degradados */
+.sidebar {
+    width: var(--sidebar-width);
+    flex: 0 0 var(--sidebar-width);
+    background-color: var(--c-brand-900);
+    color: #ffffff;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    z-index: 1040;
+}
+
+.sidebar .brand {
+    padding: 20px 20px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.sidebar .brand-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+}
+
+.sidebar .brand-sub {
+    display: block;
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 4px;
+}
+
+.sidebar .nav {
+    padding: 12px;
+    overflow-y: auto;
+}
+
+.sidebar .nav-section {
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 12px 10px 6px;
+}
+
+.sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.78);
+    border-radius: var(--radius-sm);
+    padding: 9px 12px;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    border-left: 3px solid transparent;
+}
+
+.sidebar .nav-link i {
+    font-size: 1rem;
+    width: 18px;
+    text-align: center;
+}
+
+.sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+.sidebar .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.12);
+    border-left-color: #ffffff;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 14px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    font-size: 0.8125rem;
+}
+
+.sidebar-footer a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+}
+
+.sidebar-footer a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.app-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.topbar {
+    background-color: var(--c-surface);
+    border-bottom: 1px solid var(--c-line);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+}
+
+.topbar .page-heading {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--c-ink);
+    margin: 0;
+}
+
+.topbar .user-name {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.topbar .user-role {
+    font-size: 0.75rem;
+    color: var(--c-muted);
+}
+
+.content {
+    padding: 24px;
+    flex: 1;
+}
+
+.page-title {
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: var(--c-ink);
+    margin-bottom: 4px;
+}
+
+.page-subtitle {
+    color: var(--c-muted);
+    font-size: 0.875rem;
+    margin-bottom: 0;
+}
+
+/* ----------------------------------------------------------------------------
+   3. Componentes
+   ---------------------------------------------------------------------------- */
+
+.card {
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-1);
+}
+
+.card-header {
+    background-color: var(--c-surface);
+    border-bottom: 1px solid var(--c-line-soft);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--c-ink);
+    padding: 14px 16px;
+}
+
+.card-footer {
+    border-top: 1px solid var(--c-line-soft);
+    padding: 12px 16px;
+}
+
+/* Tarjetas de indicadores */
+.stat-card .stat-value {
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--c-ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-card .stat-label {
+    color: var(--c-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.stat-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.125rem;
+}
+
+.stat-icon.bg-soft-primary { background-color: var(--c-info-bg); color: var(--c-info); }
+.stat-icon.bg-soft-info    { background-color: #eef4fa; color: var(--c-brand-700); }
+.stat-icon.bg-soft-success { background-color: var(--c-success-bg); color: var(--c-success); }
+.stat-icon.bg-soft-warning { background-color: var(--c-warning-bg); color: var(--c-warning); }
+.stat-icon.bg-soft-danger  { background-color: var(--c-danger-bg); color: var(--c-danger); }
+
+/* Tablas */
+.table {
+    margin-bottom: 0;
+    font-size: 0.875rem;
+}
+
+.table > :not(caption) > * > * {
+    padding: 10px 12px;
+    vertical-align: middle;
+    border-bottom-color: var(--c-line-soft);
+}
+
+.table thead th {
+    background-color: var(--c-canvas);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+    border-bottom: 1px solid var(--c-line);
+    white-space: nowrap;
+}
+
+.table-hover > tbody > tr:hover > * {
+    background-color: #f8fafc;
+}
+
+/* Distintivos de estado del proceso (colores planos y legibles) */
+.badge-estado {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+
+.estado-recibido      { background-color: #eef1f5; color: #34455c; border-color: #dde3ea; }
+.estado-diseno        { background-color: #eaf1f8; color: #17548a; border-color: #cfe0ef; }
+.estado-fresado       { background-color: #e8edf7; color: #33477f; border-color: #d3dcec; }
+.estado-horno_acabado { background-color: #fcf2df; color: #8a5a00; border-color: #eeddb9; }
+.estado-control       { background-color: #f1ecf8; color: #5b3f86; border-color: #e2d8ef; }
+.estado-listo         { background-color: #e7f4ec; color: #1f7a4d; border-color: #c9e5d5; }
+.estado-entregado     { background-color: #e6f2f0; color: #175e57; border-color: #c8e2de; }
+.estado-anulado       { background-color: #fbeaea; color: #a12626; border-color: #f0cfcf; }
+
+/* Tonos semánticos del texto alineados con la paleta (sin rojos saturados) */
+.content .text-danger  { color: var(--c-danger) !important; }
+.content .text-success { color: var(--c-success) !important; }
+.content .text-warning { color: var(--c-warning) !important; }
+
+/* Distintivos de Bootstrap normalizados a tonos planos de la paleta */
+.content .badge.bg-danger,
+.content .badge.bg-warning,
+.content .badge.bg-success,
+.content .badge.bg-secondary,
+.content .badge.bg-info {
+    border: 1px solid transparent;
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 3px 8px;
+}
+
+.content .badge.bg-danger    { background-color: var(--c-danger-bg) !important;  color: var(--c-danger) !important;  border-color: #f0cfcf; }
+.content .badge.bg-warning   { background-color: var(--c-warning-bg) !important; color: var(--c-warning) !important; border-color: #eeddb9; }
+.content .badge.bg-success   { background-color: var(--c-success-bg) !important; color: var(--c-success) !important; border-color: #c9e5d5; }
+.content .badge.bg-secondary { background-color: #eef1f5 !important;             color: #46536b !important;           border-color: #dde3ea; }
+.content .badge.bg-info      { background-color: var(--c-info-bg) !important;    color: var(--c-info) !important;    border-color: #cfe0ef; }
+
+/* Línea de tiempo del seguimiento */
+.timeline {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.timeline li {
+    position: relative;
+    padding: 0 0 18px 26px;
+    border-left: 2px solid var(--c-line);
+    margin-left: 7px;
+}
+
+.timeline li:last-child {
+    border-left-color: transparent;
+    padding-bottom: 0;
+}
+
+.timeline li::before {
+    content: "";
+    position: absolute;
+    left: -7px;
+    top: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--c-surface);
+    border: 2px solid var(--c-brand-700);
+}
+
+/* Cifras monetarias alineadas */
+.money {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* Acciones compactas dentro de las tablas */
+.table-actions .btn {
+    --bs-btn-padding-y: 0.15rem;
+    --bs-btn-padding-x: 0.4rem;
+    --bs-btn-font-size: 0.8125rem;
+}
+
+/* ----------------------------------------------------------------------------
+   4. Formularios y botones
+   ---------------------------------------------------------------------------- */
+
+.form-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--c-ink-soft);
+    margin-bottom: 4px;
+}
+
+.form-control,
+.form-select {
+    border-color: var(--c-line);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--c-brand-700);
+    box-shadow: 0 0 0 3px rgba(27, 101, 166, 0.12);
+}
+
+.form-text {
+    font-size: 0.75rem;
+    color: var(--c-muted);
+}
+
+.btn {
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: var(--c-brand-700);
+    border-color: var(--c-brand-700);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--c-brand-600);
+    border-color: var(--c-brand-600);
+}
+
+.btn-outline-primary {
+    color: var(--c-brand-700);
+    border-color: var(--c-brand-700);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--c-brand-700);
+    border-color: var(--c-brand-700);
+}
+
+.alert {
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    border-width: 1px;
+}
+
+.breadcrumb {
+    margin-bottom: 16px;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "/";
+    color: var(--c-muted);
+}
+
+/* ----------------------------------------------------------------------------
+   5. Pantalla de acceso
+   ---------------------------------------------------------------------------- */
+
+.login-page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+    background-color: var(--c-canvas);
+}
+
+.login-brand-panel {
+    background-color: var(--c-brand-900);
+    color: #ffffff;
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-brand-panel .brand-name {
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+}
+
+.login-brand-panel .brand-sub {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-top: 6px;
+}
+
+.login-brand-panel .brand-text {
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin-top: 28px;
+    max-width: 300px;
+}
+
+.login-brand-panel .brand-list {
+    list-style: none;
+    padding: 0;
+    margin: 24px 0 0;
+    max-width: 300px;
+}
+
+.login-brand-panel .brand-list li {
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    padding: 8px 0 8px 14px;
+    border-left: 2px solid rgba(255, 255, 255, 0.28);
+}
+
+.login-brand-panel .brand-meta {
+    margin-top: auto;
+    padding-top: 32px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.login-form-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+}
+
+.login-form-wrapper {
+    width: 100%;
+    max-width: 380px;
+}
+
+.login-form-wrapper h2 {
+    font-size: 1.375rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.login-form-wrapper .login-hint {
+    color: var(--c-muted);
+    font-size: 0.875rem;
+    margin-bottom: 24px;
+}
+
+.sidebar-backdrop {
+    display: none;
+}
+
+/* ----------------------------------------------------------------------------
+   6. Adaptación a dispositivos móviles
+   ---------------------------------------------------------------------------- */
+
+@media (max-width: 991.98px) {
+    .sidebar {
+        position: fixed;
+        left: calc(-1 * var(--sidebar-width) - 10px);
+        transition: left 0.2s ease-in-out;
+    }
+
+    .sidebar.show {
+        left: 0;
+    }
+
+    .sidebar-backdrop.show {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background-color: rgba(8, 18, 32, 0.45);
+        z-index: 1035;
+    }
+
+    .content {
+        padding: 16px;
+    }
+
+    .topbar {
+        padding: 10px 16px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .login-page {
+        grid-template-columns: 1fr;
+    }
+
+    .login-brand-panel {
+        padding: 28px 24px;
+    }
+
+    .login-brand-panel .brand-meta {
+        display: none;
+    }
+}
+
+/* ----------------------------------------------------------------------------
+   7. Impresión de reportes
+   ---------------------------------------------------------------------------- */
+
+@media print {
+    .sidebar,
+    .topbar,
+    .sidebar-backdrop,
+    .no-print {
+        display: none !important;
+    }
+
+    body {
+        background-color: #ffffff;
+    }
+
+    .content {
+        padding: 0;
+    }
+
+    .card {
+        border-color: #cccccc;
+        box-shadow: none;
+        page-break-inside: avoid;
+    }
+}
