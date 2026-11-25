@@ -26,6 +26,19 @@ controlar el inventario de materiales y administrar las entregas.
 El sistema reemplaza a la antigua simulación estática (`sistema.html`), que fue retirada
 del repositorio.
 
+## Cómo abrir el sitio
+
+El sitio **debe abrirse desde el servidor local**, no con doble clic sobre el archivo:
+
+```
+http://localhost/Netsal/                    ← sitio público
+http://localhost/Netsal/sistema/public/login  ← sistema de gestión
+```
+
+Si abre `index.html` como archivo (`file:///...`), el navegador no tiene servidor: la consulta
+de casos y el enlace al portal no funcionan, y la página muestra un aviso explicándolo.
+Con Apache y MySQL encendidos en XAMPP, ambas rutas funcionan.
+
 ## Estructura
 
 ```
@@ -54,7 +67,24 @@ del repositorio.
 | `whatsapp.js` | Botón flotante de WhatsApp |
 | `lightbox.js` | Visor de imágenes ampliadas |
 | `interactivo.js` | Interacciones adicionales |
-| `main.js` | Poblamiento del DOM a partir de `data/site.js` |
+| `main.js` | Poblamiento del DOM a partir de `data/site.js` y cifras del sistema |
+| `api.js` | Cliente de la API pública (estadísticas, consulta de casos y contacto) |
+| `consulta.js` | Seguimiento del estado de una orden por código |
+
+## API pública y consulta de casos
+
+El sitio es estático y el sistema Laravel vive en otra ruta del mismo servidor, por lo que se
+comunican mediante una API pública con CORS restringido:
+
+| Método | Ruta | Función |
+| --- | --- | --- |
+| `GET` | `/api/publico/estadisticas` | Cifras agregadas del laboratorio (sin datos de clientes) |
+| `GET` | `/api/publico/ordenes/{codigo}?contacto=` | Estado, avance e historial de una orden |
+| `POST` | `/api/publico/contacto` | Registro de una solicitud del formulario público |
+
+La consulta de una orden exige, además del código, el correo o el teléfono del cliente
+registrado; así el código correlativo no permite ver trabajos ajenos. Las solicitudes quedan
+en la bandeja **Solicitudes** del sistema y se avisan por correo al laboratorio.
 
 ## Sistema de gestión
 
@@ -72,17 +102,20 @@ MySQL. Su documentación técnica está en [sistema/README.md](sistema/README.md
 | Materiales e inventario | Costo unitario, stock, stock mínimo y alertas de reposición |
 | Consumo de materiales | Descuento automático de stock por orden y cálculo del costo del trabajo |
 | Entregas | Recojo o envío, confirmación y actualización automática del estado de la orden |
-| Reportes | Trabajos pendientes y atrasados, entregas del mes, stock bajo y margen estimado |
+| Reportes | Trabajos pendientes y atrasados, entregas del mes, stock bajo y margen estimado, con gráficos de producción y economía |
+| Panel en vivo | Indicadores, cumplimiento de plazos y tiempo promedio que se actualizan solos cada minuto |
+| Solicitudes del sitio web | Bandeja de contactos recibidos desde el formulario público, con aviso por correo |
+| Mi cuenta (portal) | Historial completo y totales del odontólogo o clínica autenticada |
 
 ### Roles
 
 | Rol | Acceso |
 | --- | --- |
-| `administrador` | Todos los módulos, costos, reportes y anulación de órdenes |
-| `recepcion` | Clientes, órdenes, entregas y reportes |
+| `administrador` | Todos los módulos, costos, reportes, anulación de órdenes y solicitudes |
+| `recepcion` | Clientes, órdenes, entregas, reportes y solicitudes del sitio web |
 | `disenador` | Órdenes y estados de diseño |
 | `tecnico` | Órdenes, materiales, consumo y reportes |
-| `odontologo` | Solo las órdenes de los clientes vinculados a su usuario |
+| `odontologo` | Solo las órdenes de los clientes vinculados a su usuario, más **Mi cuenta** |
 
 ### Optimización de consultas
 
@@ -119,6 +152,9 @@ php artisan serve
 3. Ingresar en `http://127.0.0.1:8000` con alguno de los usuarios de demostración
    (contraseña `password`): `admin@netsal.test`, `recepcion@netsal.test`,
    `diseno@netsal.test`, `tecnico@netsal.test`, `odontologo@netsal.test`.
+
+   La pantalla de acceso incluye botones de entrada rápida para esas cuentas. Es un apoyo
+   temporal para revisar el proyecto: se desactiva con `MOSTRAR_ACCESO_DEMO=false` en `.env`.
 
 ## Tecnologías
 

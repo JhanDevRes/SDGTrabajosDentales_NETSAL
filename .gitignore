@@ -19,4 +19,6 @@ desktop.ini
 # Variables de entorno y secretos
 .env
 .env.*
+# La plantilla sí se versiona: el README indica copiarla para configurar el sistema
+!sistema/.env.example
 *.local

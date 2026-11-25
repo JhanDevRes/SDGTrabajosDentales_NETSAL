@@ -25,19 +25,48 @@ Aplicación desarrollada en **Laravel 12** con arquitectura **MVC**, base de dat
 | Materiales e inventario | Costo unitario, stock, stock mínimo y alertas de reposición. |
 | Consumo de materiales | Descuento automático de stock por orden y cálculo del costo del trabajo. |
 | Entregas | Recojo o envío, confirmación y actualización automática del estado de la orden. |
-| Reportes | Trabajos pendientes y atrasados, entregas del mes, stock bajo y margen estimado. |
+| Reportes | Trabajos pendientes y atrasados, entregas del mes, stock bajo y margen estimado, con gráficos de órdenes por estado, evolución mensual y tipos de trabajo. |
+| Panel con indicadores en vivo | Contadores, cumplimiento de plazos y tiempo promedio que se actualizan solos cada minuto sin recargar la página. |
+| Solicitudes del sitio web | Bandeja de los contactos recibidos por la API pública, con aviso por correo y marcado de atendida/descartada. |
+| Mi cuenta (portal) | Historial completo, totales y datos de contacto del odontólogo autenticado. |
+| API pública | Cifras agregadas, seguimiento de una orden por código y recepción del formulario del sitio. |
 
 ## Roles y permisos
 
-| Rol | Acceso |
-| --- | --- |
-| `administrador` | Todos los módulos, incluidos costos, reportes y anulación de órdenes. |
-| `recepcion` | Clientes, órdenes, entregas y reportes. |
-| `disenador` | Órdenes y actualización de estados de diseño. |
-| `tecnico` | Órdenes, materiales, consumo y reportes. |
-| `odontologo` | Consulta únicamente las órdenes de los clientes vinculados a su usuario. |
+| Rol | Módulos | Precios de trabajos | Costos y margen | Anular / desactivar |
+| --- | --- | --- | --- | --- |
+| `administrador` | Todos | Sí | Sí | Sí |
+| `recepcion` | Panel, clientes, órdenes, entregas, reportes, solicitudes | Sí | No | No |
+| `disenador` | Panel, órdenes | No | No | No |
+| `tecnico` | Panel, órdenes, materiales, reportes | No | No | No |
+| `odontologo` | Panel, órdenes, mi cuenta (solo sus clientes) | Sí, solo lo suyo | No | No |
 
-La autorización se aplica con el middleware `role` ([EnsureUserHasRole.php](./app/Http/Middleware/EnsureUserHasRole.php)).
+La diferencia entre administración y recepción no es solo de menús: recepción registra y
+atiende al cliente, mientras que **administración concentra la información económica y las
+operaciones que afectan la facturación** (anular una orden, desactivar un cliente, ver costo de
+materiales y margen).
+
+Esas reglas viven en el modelo `User` y se aplican en tres lugares a la vez —la vista, el
+controlador y el middleware— para que no dependan de que un enlace esté oculto:
+
+```php
+public function puedeVerPrecios(): bool  // administrador, recepción y odontólogo
+public function puedeVerCostos(): bool   // solo administrador
+public function puedeAnular(): bool      // solo administrador
+```
+
+La autorización de módulos se aplica con el middleware `role`
+([EnsureUserHasRole.php](./app/Http/Middleware/EnsureUserHasRole.php)).
+
+### Acceso rápido de demostración
+
+La pantalla de ingreso muestra botones con las cinco cuentas de prueba para facilitar la
+revisión del proyecto. Se controla con una variable de entorno y **debe desactivarse antes de
+publicar el sistema**:
+
+```
+MOSTRAR_ACCESO_DEMO=false
+```
 
 ## Modelo de datos
 
@@ -122,12 +151,20 @@ La conexión se configura en `.env` (`DB_CONNECTION=mysql`, `DB_DATABASE=NetsalD
 sistema/
 ├── app/
 │   ├── Http/Controllers/   # Controladores por módulo
-│   ├── Http/Middleware/    # Autorización por rol
-│   └── Models/             # Modelos Eloquent y relaciones
+│   │   └── Api/            # Endpoints públicos para el sitio web
+│   ├── Http/Middleware/    # Autorización por rol y trazado de consultas
+│   ├── Mail/               # Avisos por correo
+│   ├── Models/             # Modelos Eloquent y relaciones
+│   └── Support/            # Caché de consultas versionada
+├── config/
+│   ├── cors.php            # Orígenes autorizados para la API pública
+│   └── sitio.php           # Correo y zona horaria del sitio
 ├── database/migrations/    # Esquema de la base de datos
 ├── database/seeders/       # Datos de demostración
 ├── resources/views/        # Vistas Blade
-├── routes/web.php          # Rutas del sistema
+├── routes/
+│   ├── api.php             # API pública (sin sesión ni CSRF)
+│   └── web.php             # Rutas del sistema (sesión y CSRF)
 └── public/css/             # Estilos del panel
 ```
 
@@ -135,6 +172,28 @@ sistema/
 
 - Consultas parametrizadas mediante Eloquent ORM (previene inyección SQL).
 - Escapado automático de salida con Blade (previene XSS).
-- Protección CSRF en todos los formularios.
+- Protección CSRF en todos los formularios del sistema.
 - Contraseñas almacenadas con hash (`bcrypt`).
 - Validación de datos en cada controlador y autorización por módulo/rol.
+- La API pública no expone datos de terceros: solo cifras agregadas y la orden consultada.
+- La consulta de una orden exige código **y** correo o teléfono del cliente registrado.
+- Límite de peticiones por IP: 30/min en consultas y 5/min en el formulario de contacto.
+- El formulario de contacto usa un campo trampa y una marca de tiempo para frenar robots.
+
+## API pública
+
+| Método | Ruta | Middleware | Descripción |
+| --- | --- | --- | --- |
+| `GET` | `/api/publico/estadisticas` | `throttle:publico` | Cifras agregadas del laboratorio en caché de 60 s |
+| `GET` | `/api/publico/ordenes/{codigo}` | `throttle:publico` | Estado, avance e historial de una orden |
+| `POST` | `/api/publico/contacto` | `throttle:contacto` | Registra la solicitud y avisa por correo |
+
+```bash
+curl "http://localhost/Netsal/sistema/public/api/publico/estadisticas"
+curl "http://localhost/Netsal/sistema/public/api/publico/ordenes/ORD-20261021-001?contacto=odontologo@netsal.test"
+```
+
+Las respuestas usan un sobre uniforme: `{"datos": {...}}` en caso de éxito y
+`{"error": {"codigo": "...", "mensaje": "..."}}` en caso de error.
+
+Los orígenes autorizados se configuran con `CORS_ALLOWED_ORIGINS` en `.env`.
