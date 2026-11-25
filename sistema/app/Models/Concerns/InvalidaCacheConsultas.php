@@ -20,11 +20,13 @@ trait InvalidaCacheConsultas
         static::saved(fn () => CacheConsultas::invalidar(
             CacheConsultas::GRUPO_PANEL,
             CacheConsultas::GRUPO_REPORTES,
+            CacheConsultas::GRUPO_PUBLICO,
         ));
 
         static::deleted(fn () => CacheConsultas::invalidar(
             CacheConsultas::GRUPO_PANEL,
             CacheConsultas::GRUPO_REPORTES,
+            CacheConsultas::GRUPO_PUBLICO,
         ));
     }
 }

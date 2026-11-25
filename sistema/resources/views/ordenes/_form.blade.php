@@ -81,14 +81,23 @@
         @enderror
     </div>
 
-    <div class="col-md-4">
-        <label for="precio" class="form-label">Precio del trabajo (S/) *</label>
-        <input type="number" step="0.01" min="0" class="form-control @error('precio') is-invalid @enderror"
-               id="precio" name="precio" value="{{ old('precio', $orden->precio ?? 0) }}" required>
-        @error('precio')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-    </div>
+    @if (auth()->user()->puedeVerPrecios())
+        <div class="col-md-4">
+            <label for="precio" class="form-label">Precio del trabajo (S/) *</label>
+            <input type="number" step="0.01" min="0" class="form-control @error('precio') is-invalid @enderror"
+                   id="precio" name="precio" value="{{ old('precio', $orden->precio ?? 0) }}" required>
+            @error('precio')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+    @else
+        <div class="col-md-4">
+            <div class="alert alert-light border small mb-0">
+                <i class="bi bi-info-circle me-1"></i>
+                El precio del trabajo lo registra administración o recepción.
+            </div>
+        </div>
+    @endif
 
     <div class="col-12">
         <label for="notas" class="form-label">Notas u observaciones</label>

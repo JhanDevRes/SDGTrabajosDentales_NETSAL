@@ -51,6 +51,22 @@ class OrdenTrabajo extends Model
         'listo',
     ];
 
+    /**
+     * Avance aproximado del trabajo según el estado, en porcentaje.
+     * Se usa en el seguimiento público para dibujar la barra de progreso
+     * sin exponer la lógica interna del laboratorio.
+     */
+    public const AVANCE_POR_ESTADO = [
+        'recibido' => 10,
+        'diseno' => 30,
+        'fresado' => 50,
+        'horno_acabado' => 65,
+        'control' => 80,
+        'listo' => 95,
+        'entregado' => 100,
+        'anulado' => 0,
+    ];
+
     protected $table = 'ordenes_trabajo';
 
     /** @var list<string> */
@@ -224,6 +240,12 @@ class OrdenTrabajo extends Model
     public function estadoNombre(): string
     {
         return self::ESTADOS[$this->estado] ?? ucfirst((string) $this->estado);
+    }
+
+    /** Avance del trabajo en porcentaje, según el estado actual. */
+    public function avance(): int
+    {
+        return self::AVANCE_POR_ESTADO[$this->estado] ?? 0;
     }
 
     /** Clase CSS del distintivo de estado. */

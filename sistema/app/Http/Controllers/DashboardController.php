@@ -6,6 +6,8 @@ use App\Models\Material;
 use App\Models\OrdenTrabajo;
 use App\Models\User;
 use App\Support\CacheConsultas;
+use App\Support\Indicadores;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -15,11 +17,16 @@ use Illuminate\View\View;
  * Optimizaciones aplicadas:
  *  1. Los cuatro contadores se obtienen con UNA sola consulta usando
  *     agregación condicional (SUM(CASE WHEN ...)) en lugar de cuatro COUNT.
- *  2. El resultado se almacena en caché por 5 minutos. La caché se invalida
- *     automáticamente cuando cambia una orden, un material o una entrega
- *     (trait InvalidaCacheConsultas).
- *  3. Las órdenes recientes se consultan con columnas explícitas y la
- *     relación del cliente precargada (evita el problema N+1).
+ *  2. El cumplimiento de plazos y el tiempo medio salen de otra única consulta
+ *     agregada (ver App\Support\Indicadores), compartida con la API pública.
+ *  3. El resultado se guarda en caché por 5 minutos y se invalida solo cuando
+ *     cambia una orden, un material o una entrega.
+ *  4. Las órdenes recientes se consultan con columnas explícitas y la relación
+ *     del cliente precargada (evita el problema N+1).
+ *
+ * El método indicadores() devuelve esas mismas cifras en JSON para que el panel
+ * se actualice solo, sin recargar la página. Usa la misma clave de caché, así
+ * que una actualización automática no genera consultas adicionales.
  */
 class DashboardController extends Controller
 {
@@ -28,15 +35,7 @@ class DashboardController extends Controller
         $user = $request->user();
         $esPortal = $user->esOdontologo();
 
-        // Clave de caché: los odontólogos ven solo sus cifras, el personal ve las globales.
-        $ambito = $esPortal ? 'portal:'.$user->id : 'personal';
-
-        $stats = CacheConsultas::recordar(
-            CacheConsultas::GRUPO_PANEL,
-            'indicadores:'.$ambito,
-            CacheConsultas::TTL_DEFECTO,
-            fn (): array => $this->calcularIndicadores($user),
-        );
+        $stats = $this->cifras($user);
 
         $recientes = OrdenTrabajo::query()
             ->select(['id', 'codigo', 'cliente_id', 'tipo_trabajo', 'estado', 'fecha_entrega', 'fecha_ingreso'])
@@ -60,10 +59,40 @@ class DashboardController extends Controller
         return view('panel', compact('stats', 'recientes', 'stockBajo'));
     }
 
+    /** Indicadores en JSON para la actualización automática del panel. */
+    public function indicadores(Request $request): JsonResponse
+    {
+        $cifras = $this->cifras($request->user());
+
+        return response()->json(
+            ['datos' => $cifras + ['actualizado_en' => now()->toIso8601String()]],
+            200,
+            [],
+            JSON_UNESCAPED_UNICODE
+        );
+    }
+
     /**
-     * Calcula los cuatro indicadores con una única consulta agregada.
+     * Cifras del panel para el usuario en sesión, servidas desde caché.
      *
-     * @return array<string, int>
+     * @return array<string, int|float>
+     */
+    private function cifras(User $user): array
+    {
+        $ambito = $user->esOdontologo() ? 'portal:'.$user->id : 'personal';
+
+        return CacheConsultas::recordar(
+            CacheConsultas::GRUPO_PANEL,
+            'indicadores:'.$ambito,
+            CacheConsultas::TTL_DEFECTO,
+            fn (): array => $this->calcularIndicadores($user),
+        );
+    }
+
+    /**
+     * Calcula los indicadores con dos consultas.
+     *
+     * @return array<string, int|float>
      */
     private function calcularIndicadores(User $user): array
     {
@@ -87,11 +116,16 @@ class DashboardController extends Controller
             )
             ->first();
 
+        $plazos = Indicadores::plazos($user->esOdontologo() ? $user->id : null);
+
         return [
             'pendientes' => (int) ($fila->pendientes ?? 0),
             'atrasadas' => (int) ($fila->atrasadas ?? 0),
             'listas' => (int) ($fila->listas ?? 0),
             'entregadas_mes' => (int) ($fila->entregadas_mes ?? 0),
+            'cumplimiento' => $plazos['cumplimiento'],
+            'tiempo_promedio' => $plazos['promedio'],
+            'entregas_medidas' => $plazos['entregas'],
         ];
     }
 }

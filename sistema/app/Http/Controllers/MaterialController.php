@@ -84,18 +84,32 @@ class MaterialController extends Controller
      */
     private function validar(Request $request): array
     {
-        return $request->validate([
+        $reglas = [
             'nombre' => ['required', 'string', 'max:150'],
             'unidad' => ['required', 'string', 'max:30'],
-            'costo' => ['required', 'numeric', 'min:0'],
             'stock' => ['required', 'numeric', 'min:0'],
             'stock_minimo' => ['required', 'numeric', 'min:0'],
-        ], [], [
+        ];
+
+        // El costo unitario es información económica interna: solo administración
+        // lo define (ver User::puedeVerCostos()). Si otro rol edita el material,
+        // el costo actual se conserva sin tocarse.
+        if ($request->user()->puedeVerCostos()) {
+            $reglas['costo'] = ['required', 'numeric', 'min:0'];
+        }
+
+        $datos = $request->validate($reglas, [], [
             'nombre' => 'nombre',
             'unidad' => 'unidad',
             'costo' => 'costo unitario',
             'stock' => 'stock',
             'stock_minimo' => 'stock mínimo',
         ]);
+
+        if (! $request->user()->puedeVerCostos()) {
+            $datos['costo'] = $request->route('material')?->costo ?? 0;
+        }
+
+        return $datos;
     }
 }

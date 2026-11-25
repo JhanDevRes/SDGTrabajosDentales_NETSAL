@@ -170,6 +170,11 @@ class OrdenTrabajoController extends Controller
 
     public function destroy(Request $request, OrdenTrabajo $orden): RedirectResponse
     {
+        // Anular deja la orden fuera de la facturación: solo administración.
+        if (! $request->user()->puedeAnular()) {
+            abort(403, 'Solo administración puede anular una orden.');
+        }
+
         if ($orden->estado === 'entregado') {
             return back()->with('error', 'No se puede anular una orden que ya fue entregada.');
         }
@@ -253,16 +258,23 @@ class OrdenTrabajoController extends Controller
      */
     private function validar(Request $request): array
     {
-        return $request->validate([
+        $reglas = [
             'cliente_id' => ['required', 'exists:clientes,id'],
             'user_id' => ['nullable', 'exists:users,id'],
             'paciente' => ['nullable', 'string', 'max:120'],
             'tipo_trabajo' => ['required', 'string', 'max:100'],
             'fecha_ingreso' => ['required', 'date'],
             'fecha_entrega' => ['nullable', 'date', 'after_or_equal:fecha_ingreso'],
-            'precio' => ['required', 'numeric', 'min:0'],
             'notas' => ['nullable', 'string', 'max:2000'],
-        ], [], [
+        ];
+
+        // El precio lo definen administración y recepción. Diseño y fresado
+        // registran el trabajo sin tocar el importe (ver User::puedeVerPrecios()).
+        if ($request->user()->puedeVerPrecios()) {
+            $reglas['precio'] = ['required', 'numeric', 'min:0', 'max:999999.99'];
+        }
+
+        $datos = $request->validate($reglas, [], [
             'cliente_id' => 'cliente',
             'user_id' => 'responsable',
             'paciente' => 'paciente',
@@ -272,5 +284,11 @@ class OrdenTrabajoController extends Controller
             'precio' => 'precio',
             'notas' => 'notas',
         ]);
+
+        if (! $request->user()->puedeVerPrecios()) {
+            $datos['precio'] = $request->route('orden')?->precio ?? 0;
+        }
+
+        return $datos;
     }
 }

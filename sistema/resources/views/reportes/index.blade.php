@@ -52,6 +52,85 @@
         </div>
     </div>
 
+    {{-- ===== Gráficos: series calculadas con GROUP BY en MySQL ===== --}}
+    <div id="reportes-graficos" data-url="{{ route('reportes.datos') }}">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+            <h3 class="h6 text-uppercase text-muted fw-bold mb-0" style="letter-spacing: .06em;">Estadísticas del periodo</h3>
+            <div class="d-flex align-items-center gap-2 no-print">
+                <small class="text-muted" id="graficos-sello"></small>
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="graficos-refrescar">
+                    <i class="bi bi-arrow-clockwise me-1"></i> Actualizar
+                </button>
+            </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-lg-4">
+                <div class="card grafico-card">
+                    <div class="card-header">Órdenes por estado</div>
+                    <div class="card-body">
+                        <div class="grafico-lienzo">
+                            <canvas id="grafico-estados" aria-label="Distribución de órdenes por estado" role="img"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="card grafico-card">
+                    <div class="card-header">Ingresadas y entregadas por mes</div>
+                    <div class="card-body">
+                        <div class="grafico-lienzo">
+                            <canvas id="grafico-meses" aria-label="Órdenes ingresadas y entregadas por mes" role="img"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="card grafico-card">
+                    <div class="card-header">Tipos de trabajo más solicitados</div>
+                    <div class="card-body">
+                        <div class="grafico-lienzo chico">
+                            <canvas id="grafico-tipos" aria-label="Tipos de trabajo más solicitados" role="img"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if ($verCostos)
+                <div class="col-lg-7">
+                    <div class="card grafico-card">
+                        <div class="card-header">Ingreso y costo de materiales por mes</div>
+                        <div class="card-body">
+                            <div class="grafico-lienzo chico">
+                                <canvas id="grafico-economia" aria-label="Ingreso facturado y costo de materiales por mes" role="img"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @else
+                <div class="col-lg-7">
+                    <div class="card grafico-card">
+                        <div class="card-header">Alcance de su perfil</div>
+                        <div class="card-body">
+                            <p class="mb-2 small">
+                                Este reporte muestra la producción del laboratorio. La información
+                                económica (ingreso facturado, costo de materiales y margen) está
+                                reservada a administración.
+                            </p>
+                            <p class="mb-0 small text-muted">
+                                Si necesita una cifra económica para su trabajo, solicítela a
+                                administración.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        </div>
+    </div>
+
+    @if ($verCostos)
     <div class="card mb-4">
         <div class="card-header"><i class="bi bi-cash-coin me-1"></i> Resumen económico</div>
         <div class="card-body">
@@ -73,6 +152,7 @@
             </div>
         </div>
     </div>
+    @endif
 
     <div class="row g-3">
         <div class="col-lg-7">
@@ -196,6 +276,7 @@
                 </div>
             </div>
 
+            @if ($verCostos)
             <div class="card">
                 <div class="card-header">
                     <i class="bi bi-calculator me-1"></i> Costos recientes por trabajo
@@ -235,6 +316,12 @@
                     </table>
                 </div>
             </div>
+            @endif
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="{{ asset('js/reportes-graficos.js') }}?v={{ filemtime(public_path('js/reportes-graficos.js')) }}"></script>
+@endpush

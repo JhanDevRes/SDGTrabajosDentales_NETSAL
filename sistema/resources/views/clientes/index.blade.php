@@ -90,21 +90,25 @@
                                     <i class="bi bi-pencil"></i>
                                 </a>
                                 @if ($cliente->activo)
-                                    <form method="POST" action="{{ route('clientes.destroy', $cliente) }}" class="d-inline"
-                                          onsubmit="return confirm('¿Desactivar este cliente? Sus órdenes se conservarán.');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Desactivar">
-                                            <i class="bi bi-person-dash"></i>
-                                        </button>
-                                    </form>
+                                    @if (auth()->user()->puedeAnular())
+                                        <form method="POST" action="{{ route('clientes.destroy', $cliente) }}" class="d-inline"
+                                              onsubmit="return confirm('¿Desactivar este cliente? Sus órdenes se conservarán.');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Desactivar">
+                                                <i class="bi bi-person-dash"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 @else
-                                    <form method="POST" action="{{ route('clientes.activar', $cliente) }}" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="btn btn-sm btn-outline-success" title="Reactivar">
-                                            <i class="bi bi-person-check"></i>
-                                        </button>
-                                    </form>
+                                    @if (auth()->user()->puedeAnular())
+                                        <form method="POST" action="{{ route('clientes.activar', $cliente) }}" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-outline-success" title="Reactivar">
+                                                <i class="bi bi-person-check"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 @endif
                             </td>
                         </tr>

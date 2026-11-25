@@ -73,6 +73,37 @@
                     </button>
                 </form>
 
+                @if (config('sitio.acceso_demo'))
+                    {{-- Acceso rápido de demostración. Se controla con MOSTRAR_ACCESO_DEMO
+                         y debe desactivarse antes de publicar el sistema. --}}
+                    <div class="demo-access" aria-label="Cuentas de demostración">
+                        <div class="demo-access-head">
+                            <span class="demo-access-title">Acceso de demostración</span>
+                            <span class="demo-access-flag">Temporal</span>
+                        </div>
+                        <p class="demo-access-help">Elija un perfil para entrar con sus credenciales de prueba.</p>
+
+                        <div class="demo-access-grid">
+                            @foreach ([
+                                ['rol' => 'Administrador', 'correo' => 'admin@netsal.test', 'alcance' => 'Todos los módulos, costos y usuarios'],
+                                ['rol' => 'Recepción', 'correo' => 'recepcion@netsal.test', 'alcance' => 'Clientes, órdenes, entregas y solicitudes'],
+                                ['rol' => 'Técnico de diseño', 'correo' => 'diseno@netsal.test', 'alcance' => 'Órdenes y estados de diseño'],
+                                ['rol' => 'Técnico de fresado', 'correo' => 'tecnico@netsal.test', 'alcance' => 'Órdenes, materiales y reportes'],
+                                ['rol' => 'Odontólogo', 'correo' => 'odontologo@netsal.test', 'alcance' => 'Solo sus trabajos y su cuenta'],
+                            ] as $cuenta)
+                                <button type="button" class="demo-account" data-email="{{ $cuenta['correo'] }}" data-password="password">
+                                    <span class="demo-account-role">{{ $cuenta['rol'] }}</span>
+                                    <span class="demo-account-scope">{{ $cuenta['alcance'] }}</span>
+                                </button>
+                            @endforeach
+                        </div>
+
+                        <p class="demo-access-note">
+                            Contraseña de todas las cuentas: <code>password</code>
+                        </p>
+                    </div>
+                @endif
+
                 <p class="text-muted small mt-4 mb-0">
                     &copy; {{ date('Y') }} Laboratorio Dental NETSAL. Todos los derechos reservados.
                 </p>
@@ -80,3 +111,18 @@
         </section>
     </div>
 @endsection
+
+@if (config('sitio.acceso_demo'))
+    @push('scripts')
+        <script>
+            // Rellena y envía el formulario con la cuenta elegida.
+            document.querySelectorAll('.demo-account').forEach(function (boton) {
+                boton.addEventListener('click', function () {
+                    document.getElementById('email').value = boton.dataset.email;
+                    document.getElementById('password').value = boton.dataset.password;
+                    document.querySelector('.login-form-panel form').submit();
+                });
+            });
+        </script>
+    @endpush
+@endif

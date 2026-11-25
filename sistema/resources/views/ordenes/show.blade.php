@@ -53,7 +53,7 @@
                         </a>
                     @endif
 
-                    @if (! $esOdontologo && ! $orden->estaCerrada())
+                    @if (auth()->user()->puedeAnular() && ! $orden->estaCerrada())
                         <form method="POST" action="{{ route('ordenes.destroy', $orden) }}"
                               onsubmit="return confirm('¿Anular esta orden de trabajo? La acción quedará registrada en el historial.');">
                             @csrf
@@ -92,10 +92,12 @@
                             <div class="text-muted small">Responsable</div>
                             <div class="fw-semibold">{{ $orden->responsable->name ?? 'Sin asignar' }}</div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="text-muted small">Precio del trabajo</div>
-                            <div class="fw-semibold money">S/ {{ number_format((float) $orden->precio, 2) }}</div>
-                        </div>
+                        @if (auth()->user()->puedeVerPrecios())
+                            <div class="col-sm-6">
+                                <div class="text-muted small">Precio del trabajo</div>
+                                <div class="fw-semibold money">S/ {{ number_format((float) $orden->precio, 2) }}</div>
+                            </div>
+                        @endif
                         <div class="col-sm-6">
                             <div class="text-muted small">Fecha de ingreso</div>
                             <div class="fw-semibold">{{ $orden->fecha_ingreso?->format('d/m/Y') }}</div>
@@ -183,9 +185,11 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <span><i class="bi bi-box-seam me-1"></i> Consumo de materiales</span>
-                        <span class="small text-muted">
-                            Costo total: <strong>S/ {{ number_format($costoMateriales, 2) }}</strong>
-                        </span>
+                        @if (auth()->user()->puedeVerCostos())
+                            <span class="small text-muted">
+                                Costo total: <strong>S/ {{ number_format($costoMateriales, 2) }}</strong>
+                            </span>
+                        @endif
                     </div>
 
                     <div class="table-responsive">
@@ -194,8 +198,10 @@
                                 <tr>
                                     <th>Material</th>
                                     <th class="text-end">Cantidad</th>
-                                    <th class="text-end">Costo unitario</th>
-                                    <th class="text-end">Subtotal</th>
+                                    @if (auth()->user()->puedeVerCostos())
+                                        <th class="text-end">Costo unitario</th>
+                                        <th class="text-end">Subtotal</th>
+                                    @endif
                                     <th></th>
                                 </tr>
                             </thead>
@@ -204,8 +210,10 @@
                                     <tr>
                                         <td>{{ $consumo->material->nombre ?? 'Material eliminado' }}</td>
                                         <td class="text-end">{{ $consumo->cantidad }} {{ $consumo->material->unidad ?? '' }}</td>
-                                        <td class="text-end money">S/ {{ number_format((float) $consumo->costo_unitario, 2) }}</td>
-                                        <td class="text-end money">S/ {{ number_format($consumo->subtotal(), 2) }}</td>
+                                        @if (auth()->user()->puedeVerCostos())
+                                            <td class="text-end money">S/ {{ number_format((float) $consumo->costo_unitario, 2) }}</td>
+                                            <td class="text-end money">S/ {{ number_format($consumo->subtotal(), 2) }}</td>
+                                        @endif
                                         <td class="text-end">
                                             @unless ($orden->estaCerrada())
                                                 <form method="POST"
@@ -222,7 +230,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center text-muted py-3">No se registró consumo de materiales.</td>
+                                        <td colspan="{{ auth()->user()->puedeVerCostos() ? 5 : 3 }}" class="text-center text-muted py-3">No se registró consumo de materiales.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -292,7 +300,7 @@
                 </div>
             </div>
 
-            @unless ($esOdontologo)
+            @if (auth()->user()->puedeVerCostos())
                 <div class="card">
                     <div class="card-header"><i class="bi bi-calculator me-1"></i> Resumen económico</div>
                     <div class="card-body">
@@ -311,7 +319,7 @@
                         </div>
                     </div>
                 </div>
-            @endunless
+            @endif
         </div>
     </div>
 @endsection

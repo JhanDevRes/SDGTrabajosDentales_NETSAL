@@ -13,7 +13,7 @@
     <title>@yield('title', 'Panel') | NETSAL</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="{{ asset('css/sistema.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/sistema.css') }}?v={{ filemtime(public_path('css/sistema.css')) }}">
 </head>
 <body>
     <div class="app-shell">
@@ -52,9 +52,24 @@
                     </a>
                 @endif
 
+                @if (auth()->user()->puedeVerModulo('solicitudes'))
+                    <a class="nav-link {{ request()->routeIs('solicitudes.*') ? 'active' : '' }}" href="{{ route('solicitudes.index') }}">
+                        <i class="bi bi-inbox"></i> Solicitudes
+                        @if (($solicitudesNuevas ?? 0) > 0)
+                            <span class="badge bg-primary ms-auto">{{ $solicitudesNuevas }}</span>
+                        @endif
+                    </a>
+                @endif
+
                 @if (auth()->user()->puedeVerModulo('reportes'))
                     <a class="nav-link {{ request()->routeIs('reportes.*') ? 'active' : '' }}" href="{{ route('reportes.index') }}">
                         <i class="bi bi-bar-chart"></i> Reportes
+                    </a>
+                @endif
+
+                @if (auth()->user()->puedeVerModulo('mi-cuenta'))
+                    <a class="nav-link {{ request()->routeIs('mi-cuenta') ? 'active' : '' }}" href="{{ route('mi-cuenta') }}">
+                        <i class="bi bi-person-vcard"></i> Mi cuenta
                     </a>
                 @endif
 

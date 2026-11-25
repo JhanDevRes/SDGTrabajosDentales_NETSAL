@@ -54,7 +54,9 @@
                     <tr>
                         <th>Material</th>
                         <th>Unidad</th>
-                        <th class="text-end">Costo unitario</th>
+                        @if (auth()->user()->puedeVerCostos())
+                            <th class="text-end">Costo unitario</th>
+                        @endif
                         <th class="text-end">Stock</th>
                         <th class="text-end">Stock mínimo</th>
                         <th>Estado</th>
@@ -66,7 +68,9 @@
                         <tr>
                             <td class="fw-semibold">{{ $material->nombre }}</td>
                             <td>{{ $material->unidad }}</td>
-                            <td class="text-end money">S/ {{ number_format((float) $material->costo, 2) }}</td>
+                            @if (auth()->user()->puedeVerCostos())
+                                <td class="text-end money">S/ {{ number_format((float) $material->costo, 2) }}</td>
+                            @endif
                             <td class="text-end">
                                 @if ($material->tieneStockBajo())
                                     <span class="badge bg-danger">{{ $material->stock }}</span>
@@ -107,7 +111,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center text-muted py-4">
+                            <td colspan="{{ auth()->user()->puedeVerCostos() ? 7 : 6 }}" class="text-center text-muted py-4">
                                 No se encontraron materiales con los filtros seleccionados.
                             </td>
                         </tr>

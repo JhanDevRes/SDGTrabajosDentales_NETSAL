@@ -28,14 +28,16 @@
         @enderror
     </div>
 
-    <div class="col-md-3">
-        <label for="costo" class="form-label">Costo unitario (S/) *</label>
-        <input type="number" step="0.01" min="0" class="form-control @error('costo') is-invalid @enderror"
-               id="costo" name="costo" value="{{ old('costo', $material->costo) }}" required>
-        @error('costo')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-    </div>
+    @if (auth()->user()->puedeVerCostos())
+        <div class="col-md-3">
+            <label for="costo" class="form-label">Costo unitario (S/) *</label>
+            <input type="number" step="0.01" min="0" class="form-control @error('costo') is-invalid @enderror"
+                   id="costo" name="costo" value="{{ old('costo', $material->costo) }}" required>
+            @error('costo')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+    @endif
 
     <div class="col-md-4">
         <label for="stock" class="form-label">Stock actual *</label>

@@ -21,48 +21,85 @@
         @endunless
     </div>
 
-    <div class="row g-3 mb-4">
-        <div class="col-sm-6 col-xl-3">
-            <div class="card stat-card h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="stat-label">Trabajos pendientes</div>
-                        <div class="stat-value">{{ $stats['pendientes'] }}</div>
+    <div id="panel-indicadores"
+         data-url="{{ route('panel.indicadores') }}"
+         data-intervalo="60">
+
+        <div class="row g-3 mb-3">
+            <div class="col-sm-6 col-xl-3">
+                <div class="card stat-card h-100">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stat-label">Trabajos pendientes</div>
+                            <div class="stat-value" data-indicador="pendientes" data-formato="entero">{{ $stats['pendientes'] }}</div>
+                        </div>
+                        <div class="stat-icon bg-soft-primary"><i class="bi bi-hourglass-split"></i></div>
                     </div>
-                    <div class="stat-icon bg-soft-primary"><i class="bi bi-hourglass-split"></i></div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="card stat-card h-100">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stat-label">Trabajos atrasados</div>
+                            <div class="stat-value text-danger" data-indicador="atrasadas" data-formato="entero">{{ $stats['atrasadas'] }}</div>
+                        </div>
+                        <div class="stat-icon bg-soft-danger"><i class="bi bi-exclamation-octagon"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="card stat-card h-100">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stat-label">Listos para entrega</div>
+                            <div class="stat-value text-success" data-indicador="listas" data-formato="entero">{{ $stats['listas'] }}</div>
+                        </div>
+                        <div class="stat-icon bg-soft-success"><i class="bi bi-check2-circle"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="card stat-card h-100">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stat-label">Entregados este mes</div>
+                            <div class="stat-value" data-indicador="entregadas_mes" data-formato="entero">{{ $stats['entregadas_mes'] }}</div>
+                        </div>
+                        <div class="stat-icon bg-soft-info"><i class="bi bi-truck"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 col-xl-3">
-            <div class="card stat-card h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="stat-label">Trabajos atrasados</div>
-                        <div class="stat-value text-danger">{{ $stats['atrasadas'] }}</div>
+
+        {{-- Medidores de plazos: se actualizan solos cada minuto --}}
+        <div class="card mb-4">
+            <div class="card-body indicadores-banda">
+                <div class="indicadores-medidor">
+                    <div class="stat-label">Cumplimiento de plazos (180 días)</div>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="indicadores-barra flex-grow-1">
+                            <span id="indicador-barra" style="width: {{ max(0, min(100, $stats['cumplimiento'])) }}%"></span>
+                        </div>
+                        <strong class="text-nowrap" data-indicador="cumplimiento" data-formato="porcentaje">{{ $stats['entregas_medidas'] > 0 ? $stats['cumplimiento'].'%' : '—' }}</strong>
                     </div>
-                    <div class="stat-icon bg-soft-danger"><i class="bi bi-exclamation-octagon"></i></div>
+                    <small class="text-muted">
+                        Sobre {{ $stats['entregas_medidas'] }} entrega(s) confirmada(s) en el periodo.
+                    </small>
                 </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-xl-3">
-            <div class="card stat-card h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="stat-label">Listos para entrega</div>
-                        <div class="stat-value text-success">{{ $stats['listas'] }}</div>
-                    </div>
-                    <div class="stat-icon bg-soft-success"><i class="bi bi-check2-circle"></i></div>
+
+                <div>
+                    <div class="stat-label">Tiempo promedio de producción</div>
+                    <div class="fs-4 fw-semibold" data-indicador="tiempo_promedio" data-formato="dias">{{ $stats['entregas_medidas'] > 0 ? $stats['tiempo_promedio'].' d' : '—' }}</div>
+                    <small class="text-muted">Desde el ingreso hasta la entrega.</small>
                 </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-xl-3">
-            <div class="card stat-card h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="stat-label">Entregados este mes</div>
-                        <div class="stat-value">{{ $stats['entregadas_mes'] }}</div>
-                    </div>
-                    <div class="stat-icon bg-soft-info"><i class="bi bi-truck"></i></div>
+
+                <div class="indicadores-sello">
+                    <span class="indicadores-pulso" id="indicador-pulso" title="Actualización automática cada minuto"></span>
+                    <span id="indicador-sello">actualizado ahora</span>
+                    <button type="button" class="btn btn-sm btn-outline-secondary no-print" id="indicador-refrescar">
+                        <i class="bi bi-arrow-clockwise me-1"></i> Actualizar
+                    </button>
                 </div>
             </div>
         </div>
@@ -146,3 +183,7 @@
         @endif
     </div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/panel-indicadores.js') }}?v={{ filemtime(public_path('js/panel-indicadores.js')) }}"></script>
+@endpush

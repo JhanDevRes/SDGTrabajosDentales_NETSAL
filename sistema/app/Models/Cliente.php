@@ -77,4 +77,42 @@ class Cliente extends Model
     {
         return $this->tipo === 'clinica' ? 'Clínica' : 'Odontólogo';
     }
+
+    /**
+     * Comprueba si el contacto indicado pertenece a este cliente.
+     *
+     * Se usa en la consulta pública del estado de una orden: además del código
+     * (que es correlativo y por tanto adivinable) se exige el correo o el
+     * teléfono con el que el cliente está registrado, para que nadie pueda
+     * recorrer los códigos y ver trabajos ajenos.
+     *
+     * La comparación del teléfono se hace sobre los últimos nueve dígitos para
+     * que "+51 984 111 222", "984111222" y "984 111 222" se consideren iguales.
+     */
+    public function coincideConContacto(string $contacto): bool
+    {
+        $contacto = trim($contacto);
+
+        if ($contacto === '') {
+            return false;
+        }
+
+        if (str_contains($contacto, '@')) {
+            return $this->email !== null
+                && mb_strtolower($this->email) === mb_strtolower($contacto);
+        }
+
+        $ingresado = self::soloDigitos($contacto);
+        $registrado = self::soloDigitos((string) $this->telefono);
+
+        return strlen($ingresado) >= 6
+            && strlen($registrado) >= 6
+            && substr($ingresado, -9) === substr($registrado, -9);
+    }
+
+    /** Quita espacios, guiones, paréntesis y el prefijo + de un teléfono. */
+    private static function soloDigitos(string $valor): string
+    {
+        return preg_replace('/\D+/', '', $valor) ?? '';
+    }
 }

@@ -72,15 +72,25 @@ class ClienteController extends Controller
     }
 
     /** Baja lógica: conserva las órdenes y el historial del cliente. */
-    public function destroy(Cliente $cliente): RedirectResponse
+    public function destroy(Request $request, Cliente $cliente): RedirectResponse
     {
+        // Desactivar a un cliente afecta al directorio y a la facturación futura:
+        // queda reservado a administración (ver User::puedeAnular()).
+        if (! $request->user()->puedeAnular()) {
+            abort(403, 'Solo administración puede desactivar clientes.');
+        }
+
         $cliente->update(['activo' => false]);
 
         return redirect()->route('clientes.index')->with('success', 'Cliente desactivado. Sus órdenes se conservan en el historial.');
     }
 
-    public function activar(Cliente $cliente): RedirectResponse
+    public function activar(Request $request, Cliente $cliente): RedirectResponse
     {
+        if (! $request->user()->puedeAnular()) {
+            abort(403, 'Solo administración puede reactivar clientes.');
+        }
+
         $cliente->update(['activo' => true]);
 
         return redirect()->route('clientes.index')->with('success', 'Cliente reactivado correctamente.');

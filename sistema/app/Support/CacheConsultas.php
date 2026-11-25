@@ -30,11 +30,23 @@ class CacheConsultas
     public const GRUPO_REPORTES = 'reportes';
 
     /**
+     * Grupo de estadísticas públicas que consume el sitio web.
+     * Se invalida junto con los demás porque se calcula sobre las mismas tablas.
+     */
+    public const GRUPO_PUBLICO = 'publico';
+
+    /**
      * Tiempo de vida por defecto de los resultados cacheados (segundos).
      * 300 s = 5 minutos: suficiente para aliviar la base de datos sin
      * mostrar información visiblemente desactualizada.
      */
     public const TTL_DEFECTO = 300;
+
+    /**
+     * Las estadísticas del sitio web son visibles para cualquier visitante, por
+     * lo que conviene refrescarlas más seguido que las cifras internas.
+     */
+    public const TTL_PUBLICO = 60;
 
     /**
      * Devuelve el valor cacheado del grupo o lo calcula y lo almacena.

@@ -77,7 +77,9 @@
                         <th>Estado</th>
                         <th>Ingreso</th>
                         <th>Entrega</th>
-                        <th class="text-end">Precio</th>
+                        @if (auth()->user()->puedeVerPrecios())
+                            <th class="text-end">Precio</th>
+                        @endif
                         <th class="text-end">Acciones</th>
                     </tr>
                 </thead>
@@ -104,7 +106,9 @@
                                     <span class="badge bg-danger ms-1">Atrasada</span>
                                 @endif
                             </td>
-                            <td class="text-end money">S/ {{ number_format((float) $orden->precio, 2) }}</td>
+                            @if (auth()->user()->puedeVerPrecios())
+                                <td class="text-end money">S/ {{ number_format((float) $orden->precio, 2) }}</td>
+                            @endif
                             <td class="text-end table-actions">
                                 <a href="{{ route('ordenes.show', $orden) }}" class="btn btn-sm btn-outline-secondary" title="Ver detalle">
                                     <i class="bi bi-eye"></i>
@@ -118,7 +122,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="text-center text-muted py-4">
+                            <td colspan="{{ auth()->user()->puedeVerPrecios() ? 9 : 8 }}" class="text-center text-muted py-4">
                                 No se encontraron órdenes con los filtros seleccionados.
                             </td>
                         </tr>

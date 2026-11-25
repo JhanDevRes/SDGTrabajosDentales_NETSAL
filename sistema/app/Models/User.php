@@ -116,17 +116,56 @@ class User extends Authenticatable
     }
 
     /**
+     * Precio del trabajo visible (lo que se cobra al cliente).
+     *
+     * Administración define los precios y recepción los informa al odontólogo
+     * al recibir el caso, por eso ambos lo ven. Diseño y fresado trabajan sobre
+     * la orden sin necesidad de conocer el importe. El odontólogo ve el precio
+     * de sus propios trabajos en su estado de cuenta.
+     */
+    public function puedeVerPrecios(): bool
+    {
+        return in_array($this->rol, ['administrador', 'recepcion', 'odontologo'], true);
+    }
+
+    /**
+     * Información económica interna: costo unitario de materiales, costo real
+     * del trabajo y margen bruto.
+     *
+     * Es información de gestión del laboratorio y solo la ve administración.
+     * Recepción atiende al cliente; los técnicos producen. Ninguno de los dos
+     * necesita saber cuánto gana el laboratorio por trabajo.
+     */
+    public function puedeVerCostos(): bool
+    {
+        return $this->rol === 'administrador';
+    }
+
+    /**
+     * Anular una orden o desactivar un cliente.
+     *
+     * Son operaciones con efecto contable e histórico (la orden anulada deja de
+     * facturarse y el cliente deja de aparecer en el directorio), por lo que
+     * quedan reservadas a administración. Recepción registra y edita, pero no
+     * elimina.
+     */
+    public function puedeAnular(): bool
+    {
+        return $this->rol === 'administrador';
+    }
+
+    /**
      * Indica si el rol puede acceder a un módulo del panel.
      * La misma lista se usa en las rutas (middleware role) y en el menú.
      */
     public function puedeVerModulo(string $modulo): bool
     {
         $permisos = [
-            'administrador' => ['panel', 'clientes', 'ordenes', 'materiales', 'entregas', 'reportes', 'usuarios'],
-            'recepcion' => ['panel', 'clientes', 'ordenes', 'entregas', 'reportes'],
+            'administrador' => ['panel', 'clientes', 'ordenes', 'materiales', 'entregas', 'reportes', 'usuarios', 'solicitudes'],
+            'recepcion' => ['panel', 'clientes', 'ordenes', 'entregas', 'reportes', 'solicitudes'],
             'disenador' => ['panel', 'ordenes'],
             'tecnico' => ['panel', 'ordenes', 'materiales', 'reportes'],
-            'odontologo' => ['panel', 'ordenes'],
+            'odontologo' => ['panel', 'ordenes', 'mi-cuenta'],
         ];
 
         return in_array($modulo, $permisos[$this->rol] ?? [], true);
