@@ -1,0 +1,390 @@
+/* ============================================================
+   css/consulta.css  — NETSAL Laboratorio Dental Digital
+   Sección de consulta pública de casos y cifras del laboratorio.
+   Paleta plana: blanco, azul corporativo y rojo de acento.
+   ============================================================ */
+
+.consulta {
+  background: var(--color-white);
+}
+
+/* ===== Cifras del laboratorio ===== */
+
+.consulta-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-xl);
+  overflow: hidden;
+}
+
+.consulta-stat {
+  padding: var(--space-lg) var(--space-md);
+  text-align: center;
+  border-right: 1px solid var(--color-border);
+}
+
+.consulta-stat:last-child {
+  border-right: 0;
+}
+
+.consulta-stat b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+  color: var(--color-dark);
+  line-height: 1.1;
+}
+
+.consulta-stat span {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.consulta-actualizado {
+  margin: calc(var(--space-md) * -1) 0 var(--space-lg);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+/* ===== Rejilla principal ===== */
+
+.consulta-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+.consulta-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  min-width: 0;
+}
+
+.consulta-card h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--color-dark);
+  margin-bottom: 0.35rem;
+}
+
+.consulta-card > p {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-md);
+}
+
+/* ===== Formulario ===== */
+
+.consulta-form .form-group:last-of-type {
+  margin-bottom: var(--space-md);
+}
+
+.consulta-ayuda {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  margin-top: 0.3rem;
+}
+
+.consulta-error {
+  display: none;
+  background: var(--color-red-soft);
+  border-left: 3px solid var(--color-primary);
+  color: var(--color-primary-dark);
+  font-size: var(--fs-sm);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  margin-top: var(--space-md);
+}
+
+.consulta-error.is-visible {
+  display: block;
+}
+
+/* ===== Resultado ===== */
+
+.consulta-resultado {
+  margin-top: var(--space-lg);
+}
+
+.consulta-resultado-card {
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-secondary);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  background: var(--color-white);
+}
+
+.consulta-resultado-cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-md);
+}
+
+.consulta-resultado-etiqueta {
+  display: block;
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+
+.consulta-resultado-codigo {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 800;
+  color: var(--color-dark);
+}
+
+.consulta-resultado-distintivos {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.consulta-estado {
+  display: inline-block;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-gray);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.consulta-estado-recibido      { background: #EEF1F5; color: #34455C; border-color: #DDE3EA; }
+.consulta-estado-diseno        { background: #EAF1F8; color: #17548A; border-color: #CFE0EF; }
+.consulta-estado-fresado       { background: #E8EDF7; color: #33477F; border-color: #D3DCEC; }
+.consulta-estado-horno_acabado { background: #FCF2DF; color: #8A5A00; border-color: #EEDDB9; }
+.consulta-estado-control       { background: #F1ECF8; color: #5B3F86; border-color: #E2D8EF; }
+.consulta-estado-listo         { background: #E7F4EC; color: #1F7A4D; border-color: #C9E5D5; }
+.consulta-estado-entregado     { background: #E6F2F0; color: #175E57; border-color: #C8E2DE; }
+.consulta-estado-anulado       { background: #FBEAEA; color: #A12626; border-color: #F0CFCF; }
+
+.consulta-aviso {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-red-soft);
+  color: var(--color-primary-dark);
+  border: 1px solid rgba(242, 29, 47, 0.28);
+}
+
+/* ===== Barra de avance ===== */
+
+.consulta-avance {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.consulta-barra {
+  flex: 1;
+  height: 8px;
+  background: var(--color-gray2);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.consulta-barra span {
+  display: block;
+  height: 100%;
+  background: var(--color-secondary);
+  border-radius: var(--radius-full);
+  transition: width var(--transition-base);
+}
+
+.consulta-avance-texto {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--color-secondary-dk);
+  white-space: nowrap;
+}
+
+/* ===== Datos y línea de tiempo ===== */
+
+.consulta-datos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.consulta-dato {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--color-gray2);
+  font-size: var(--fs-sm);
+}
+
+.consulta-dato-etiqueta {
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.consulta-dato-valor {
+  font-weight: 600;
+  color: var(--color-dark);
+  text-align: right;
+}
+
+.consulta-subtitulo {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  margin: var(--space-md) 0 var(--space-sm);
+}
+
+.consulta-linea {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 1.15rem;
+  border-left: 2px solid var(--color-gray2);
+}
+
+.consulta-paso {
+  position: relative;
+  padding-bottom: var(--space-sm);
+}
+
+.consulta-paso::before {
+  content: "";
+  position: absolute;
+  left: calc(-1.15rem - 6px);
+  top: 0.35rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-white);
+  border: 2px solid var(--color-secondary);
+}
+
+.consulta-paso:last-child::before {
+  background: var(--color-secondary);
+}
+
+.consulta-paso-estado {
+  display: block;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+.consulta-paso-fecha {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.consulta-paso-nota {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  margin-top: 0.15rem;
+}
+
+/* ===== Portal del odontólogo ===== */
+
+.consulta-portal {
+  background: var(--color-gray);
+  border: 1px solid var(--color-border);
+}
+
+.consulta-portal .btn {
+  margin-top: var(--space-md);
+  width: 100%;
+  justify-content: center;
+}
+
+.consulta-portal-lista {
+  list-style: none;
+  margin: var(--space-md) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.consulta-portal-lista li {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+}
+
+.consulta-portal-lista li::before {
+  content: "";
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  margin-top: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-secondary);
+}
+
+.consulta-portal-nota {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--space-md);
+  margin-bottom: 0;
+}
+
+/* ===== Responsive ===== */
+
+@media (max-width: 992px) {
+  .consulta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .consulta-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .consulta-stat:nth-child(2) {
+    border-right: 0;
+  }
+
+  .consulta-stat:nth-child(1),
+  .consulta-stat:nth-child(2) {
+    border-bottom: 1px solid var(--color-border);
+  }
+}
+
+@media (max-width: 576px) {
+  .consulta-card {
+    padding: var(--space-md);
+  }
+
+  .consulta-datos {
+    grid-template-columns: 1fr;
+  }
+
+  .consulta-stat b {
+    font-size: var(--fs-xl);
+  }
+}

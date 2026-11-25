@@ -152,3 +152,29 @@
   height: 20px;
   flex-shrink: 0;
 }
+
+/* Aviso de error del envío (validación del servidor o falta de conexión) */
+.form-error {
+  display: none;
+  background: var(--color-red-soft);
+  border-left: 3px solid var(--color-primary);
+  color: var(--color-primary-dark);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  font-size: var(--fs-sm);
+  margin-bottom: var(--space-md);
+}
+
+.form-error.is-visible {
+  display: block;
+}
+
+/* Campo trampa contra robots: invisible para las personas, presente en el DOM */
+.form-honeypot {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

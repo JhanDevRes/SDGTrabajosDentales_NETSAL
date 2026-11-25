@@ -94,6 +94,72 @@
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'
   };
 
+  /* ===== Estadísticas del laboratorio ===== */
+  function pintarHeroStats(items) {
+    var html = "";
+    items.forEach(function (item) {
+      html += '<div class="stat"><b>' + item.value + "</b><span>" + item.label + "</span></div>";
+    });
+    setHTML("hero-stats", html);
+  }
+
+  function pintarConsultaStats(datos) {
+    var api = window.NetsalApi;
+    if (!api) return;
+
+    var items = [
+      { value: api.numero(datos.ordenes_procesadas), label: "trabajos procesados" },
+      { value: api.numero(datos.clientes_activos), label: "clientes activos" },
+      { value: api.numero(datos.entregadas_mes), label: "entregas este mes" },
+      { value: api.porcentaje(datos.cumplimiento_plazo), label: "entregas a tiempo" }
+    ];
+
+    var html = "";
+    items.forEach(function (item) {
+      html +=
+        '<div class="consulta-stat">' +
+        "<b>" + item.value + "</b>" +
+        "<span>" + item.label + "</span>" +
+        "</div>";
+    });
+    setHTML("consulta-stats", html);
+
+    var sello = document.getElementById("consulta-actualizado");
+    if (sello) {
+      var fecha = datos.actualizado_en ? new Date(datos.actualizado_en) : new Date();
+      sello.textContent =
+        "Datos del sistema actualizados al " +
+        fecha.toLocaleDateString("es-PE", { day: "2-digit", month: "long", year: "numeric" }) +
+        ", " +
+        fecha.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" });
+    }
+  }
+
+  /**
+   * Consulta las cifras reales del laboratorio. Si el sistema no responde se
+   * mantienen las cifras de respaldo: el sitio nunca queda con espacios vacíos.
+   */
+  function cargarEstadisticas() {
+    var api = window.NetsalApi;
+    if (!api) return;
+
+    api
+      .estadisticas()
+      .then(function (datos) {
+        pintarHeroStats([
+          { value: "+" + api.numero(datos.ordenes_procesadas), label: "trabajos procesados" },
+          { value: api.porcentaje(datos.cumplimiento_plazo), label: "entregas a tiempo" },
+          { value: api.dias(datos.tiempo_promedio_dias), label: "promedio de producción" }
+        ]);
+        pintarConsultaStats(datos);
+      })
+      .catch(function () {
+        /* Sin conexión con el sistema: se conservan los valores de respaldo. */
+        var sello = document.getElementById("consulta-actualizado");
+        if (sello) sello.textContent = "Cifras institucionales del laboratorio.";
+      });
+  }
+
   /* ===== Poblar datos ===== */
   function populateSite() {
     /* Topbar */
@@ -113,13 +179,19 @@
     setText("hero-subtitle", site.hero.subtitle);
     setText("hero-phone", site.phoneDisplay);
 
-    /* Stats del hero */
-    var statsHTML = "";
-    site.hero.stats.forEach(function (stat) {
-      statsHTML +=
-        '<div class="stat"><b>' + stat.value + "</b><span>" + stat.label + "</span></div>";
-    });
-    setHTML("hero-stats", statsHTML);
+    /* Stats del hero: primero las cifras de respaldo de data/site.js y,
+       si el sistema responde, los datos reales (ver cargarEstadisticas). */
+    pintarHeroStats(site.hero.stats);
+
+    /* Sección de consulta pública */
+    if (site.consulta) {
+      setText("consulta-eyebrow", site.consulta.eyebrow);
+      setText("consulta-title", site.consulta.title);
+      setText("consulta-subtitle", site.consulta.subtitle);
+      setText("consulta-portal-titulo", site.consulta.portalTitulo);
+      setText("consulta-portal-texto", site.consulta.portalTexto);
+      setText("consulta-portal-nota", site.consulta.portalNota);
+    }
 
     /* Servicios */
     var servicesHTML = "";
@@ -377,63 +449,122 @@
   }
 
   /* ===== Formulario de contacto / recepción de casos ===== */
+  /**
+   * Envía la solicitud a la API pública del sistema (POST /api/publico/contacto)
+   * y guarda además una copia en WhatsApp como respaldo si el sistema no
+   * responde. El mensaje de WhatsApp se arma con los mismos datos.
+   */
   function initContactForm() {
     var form = document.getElementById("contact-form");
     if (!form) return;
 
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
+    var boton = form.querySelector('button[type="submit"]');
+    var contenidoBoton = boton ? boton.innerHTML : "";
+    var exito = document.getElementById("form-success");
+    var error = document.getElementById("form-error");
+    var marcaTiempo = document.getElementById("contact-t");
 
-      var name = document.getElementById("contact-name");
-      var phone = document.getElementById("contact-phone");
-      var message = document.getElementById("contact-message");
-      var success = document.getElementById("form-success");
+    /* Marca de tiempo para el control anti-robots del servidor. */
+    if (marcaTiempo) marcaTiempo.value = String(Date.now());
 
-      var valid = true;
-      [name, phone, message].forEach(function (field) {
-        if (!field.value.trim()) {
-          field.style.borderColor = "#F21D2F";
-          field.style.boxShadow = "0 0 0 3px rgba(242, 29, 47, 0.12)";
-          valid = false;
-        } else {
-          field.style.borderColor = "";
-          field.style.boxShadow = "";
-        }
-      });
+    function mostrarError(mensaje) {
+      if (!error) return;
+      error.textContent = mensaje;
+      error.classList.add("is-visible");
+    }
 
-      if (!valid) return;
+    function ocultarError() {
+      if (error) error.classList.remove("is-visible");
+    }
 
-      var service = document.getElementById("contact-service");
-      var email = document.getElementById("contact-email");
-      var text =
-        "Hola " + site.labName + ", soy " + name.value.trim() +
+    function mensajeWhatsApp(datos) {
+      return (
+        "Hola " + site.labName + ", soy " + datos.nombre +
         ". Deseo coordinar un caso." +
-        (service.value ? " Tipo de trabajo: " + service.value + "." : "") +
-        (email.value ? " Correo: " + email.value + "." : "") +
-        " Teléfono: " + phone.value.trim() + "." +
-        (message.value.trim() ? " Indicaciones del caso: " + message.value.trim() : "");
+        (datos.servicio ? " Tipo de trabajo: " + datos.servicio + "." : "") +
+        (datos.email ? " Correo: " + datos.email + "." : "") +
+        " Teléfono: " + datos.telefono + "." +
+        " Indicaciones del caso: " + datos.mensaje
+      );
+    }
 
-      var waUrl = "https://wa.me/" + site.whatsapp + "?text=" + encodeURIComponent(text);
+    function abrirWhatsApp(datos) {
+      var url = "https://wa.me/" + site.whatsapp + "?text=" + encodeURIComponent(mensajeWhatsApp(datos));
+      var ventana = window.open(url, "_blank");
+      if (!ventana) {
+        var enlace = document.createElement("a");
+        enlace.href = url;
+        enlace.target = "_blank";
+        enlace.rel = "noopener";
+        document.body.appendChild(enlace);
+        enlace.click();
+        document.body.removeChild(enlace);
+      }
+    }
 
-      success.classList.add("is-visible");
-      form.reset();
+    form.addEventListener("submit", function (evento) {
+      evento.preventDefault();
+      ocultarError();
 
-      /* Abrir WhatsApp en nueva pestaña de forma segura */
-      var win = window.open(waUrl, "_blank");
-      if (!win) {
-        /* Fallback: crear enlace temporal si el popup es bloqueado */
-        var a = document.createElement("a");
-        a.href = waUrl;
-        a.target = "_blank";
-        a.rel = "noopener";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+      var nombre = document.getElementById("contact-name");
+      var telefono = document.getElementById("contact-phone");
+      var correo = document.getElementById("contact-email");
+      var servicio = document.getElementById("contact-service");
+      var mensaje = document.getElementById("contact-message");
+
+      if (!nombre.value.trim() || !telefono.value.trim() || !mensaje.value.trim()) {
+        mostrarError("Complete el nombre, el teléfono y las indicaciones del caso.");
+        return;
       }
 
-      setTimeout(function () {
-        success.classList.remove("is-visible");
-      }, 6000);
+      var datos = {
+        nombre: nombre.value.trim(),
+        telefono: telefono.value.trim(),
+        email: correo.value.trim(),
+        servicio: servicio.value,
+        mensaje: mensaje.value.trim(),
+        _t: Number((marcaTiempo && marcaTiempo.value) || Date.now())
+      };
+
+      var api = window.NetsalApi;
+      if (!api) {
+        abrirWhatsApp(datos);
+        return;
+      }
+
+      if (boton) {
+        boton.disabled = true;
+        boton.innerHTML = "Enviando solicitud…";
+      }
+
+      api
+        .enviarSolicitud(datos)
+        .then(function () {
+          if (exito) {
+            exito.classList.add("is-visible");
+            window.setTimeout(function () {
+              exito.classList.remove("is-visible");
+            }, 8000);
+          }
+          form.reset();
+          if (marcaTiempo) marcaTiempo.value = String(Date.now());
+        })
+        .catch(function (fallo) {
+          if (fallo.codigo === "sin_conexion" || fallo.codigo === "tiempo_agotado" || fallo.codigo === "protocolo_archivo") {
+            mostrarError("El sistema no respondió. Abrimos WhatsApp para que no pierda su consulta.");
+            abrirWhatsApp(datos);
+          } else if (fallo.estado === 429) {
+            mostrarError("Recibimos varias solicitudes seguidas. Espere un minuto y vuelva a intentarlo.");
+          } else {
+            mostrarError(fallo.message);
+          }
+        })
+        .finally(function () {
+          if (boton) {
+            boton.disabled = false;
+            boton.innerHTML = contenidoBoton;
+          }
+        });
     });
   }
 
@@ -441,5 +572,6 @@
   document.addEventListener("DOMContentLoaded", function () {
     populateSite();
     initContactForm();
+    cargarEstadisticas();
   });
 })();

@@ -6,16 +6,20 @@ use App\Http\Controllers\ConsumoMaterialController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EntregaController;
 use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\MiCuentaController;
 use App\Http\Controllers\OrdenTrabajoController;
 use App\Http\Controllers\ReporteController;
+use App\Http\Controllers\SolicitudContactoController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/panel');
+Route::get('/', fn () => redirect()->route('panel'));
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [LoginController::class, 'showLogin'])->name('login');
-    Route::post('login', [LoginController::class, 'login'])->name('login.store');
+    Route::post('login', [LoginController::class, 'login'])
+        ->middleware('throttle:login')
+        ->name('login.store');
 });
 
 Route::post('logout', [LoginController::class, 'logout'])
@@ -24,6 +28,14 @@ Route::post('logout', [LoginController::class, 'logout'])
 
 Route::middleware('auth')->group(function () {
     Route::get('panel', DashboardController::class)->name('panel');
+
+    // Cifras del panel en JSON, para actualizarlas sin recargar la página.
+    Route::get('panel/indicadores', [DashboardController::class, 'indicadores'])->name('panel.indicadores');
+
+    // Portal del odontólogo: su historial y sus totales.
+    Route::get('mi-cuenta', MiCuentaController::class)
+        ->middleware('role:odontologo')
+        ->name('mi-cuenta');
 
     Route::middleware('role:administrador,recepcion')->group(function () {
         Route::resource('clientes', ClienteController::class)->except('show');
@@ -60,9 +72,21 @@ Route::middleware('auth')->group(function () {
         Route::post('entregas/{entrega}/confirmar', [EntregaController::class, 'confirmar'])->name('entregas.confirmar');
     });
 
+    // Bandeja de solicitudes recibidas desde el sitio web.
+    Route::middleware('role:administrador,recepcion')->group(function () {
+        Route::get('solicitudes', [SolicitudContactoController::class, 'index'])->name('solicitudes.index');
+        Route::post('solicitudes/{solicitud}/atender', [SolicitudContactoController::class, 'atender'])->name('solicitudes.atender');
+        Route::post('solicitudes/{solicitud}/descartar', [SolicitudContactoController::class, 'descartar'])->name('solicitudes.descartar');
+    });
+
     Route::get('reportes', [ReporteController::class, 'index'])
         ->middleware('role:administrador,recepcion,tecnico')
         ->name('reportes.index');
+
+    // Series para los gráficos del reporte (JSON).
+    Route::get('reportes/datos', [ReporteController::class, 'datos'])
+        ->middleware('role:administrador,recepcion,tecnico')
+        ->name('reportes.datos');
 
     Route::middleware('role:administrador')->group(function () {
         Route::resource('usuarios', UserController::class)

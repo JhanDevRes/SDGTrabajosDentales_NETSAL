@@ -97,11 +97,35 @@ const site = {
     accent: "fresado robótico CAD/CAM",
     subtitle:
       "El aliado tecnológico de odontólogos y clínicas dentales. Diseñamos y manufacturamos prótesis en Zirconio multicapa, Disilicato de Litio, Barras de Titanio DMLS y Guías 3D con sellado marginal perfecto.",
+    /* Cifras de respaldo: se muestran mientras el sistema no responde.
+       Cuando la API pública contesta, main.js las reemplaza por los datos
+       reales del laboratorio (ver js/api.js). */
     stats: [
-      { value: "+10,000", label: "casos procesados" },
-      { value: "100%", label: "precisión robótica" },
-      { value: "24-48h", label: "envío express" }
+      { value: "24-48h", label: "entrega estándar" },
+      { value: "5 ejes", label: "fresado CAD/CAM" },
+      { value: "100%", label: "trazabilidad por orden" }
     ]
+  },
+
+  /* ===== API pública del sistema Laravel ===== */
+  api: {
+    /* Ruta relativa: el sitio y el sistema viven en el mismo servidor. */
+    base: "sistema/public/api/publico",
+    timeout: 8000,
+    /* Página de acceso al panel, usada por la sección de consulta. */
+    acceso: "sistema/public/login"
+  },
+
+  /* ===== Consulta pública de casos ===== */
+  consulta: {
+    eyebrow: "Consulta de casos",
+    title: "Sigue el estado de tu trabajo",
+    subtitle:
+      "Consulte con el código de la orden y el correo o teléfono con el que está registrado en el laboratorio. También puede ingresar al portal para ver todo su historial.",
+    portalTitulo: "Portal del odontólogo",
+    portalTexto:
+      "Acceda con su usuario institucional para revisar el historial completo de sus trabajos, sus totales y los datos de contacto de sus clínicas.",
+    portalNota: "Las cuentas son creadas por el laboratorio al registrar al cliente."
   },
 
   /* ===== Servicios de Laboratorio ===== */

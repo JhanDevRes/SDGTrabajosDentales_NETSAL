@@ -1,0 +1,32 @@
+# ============================================================================
+# NETSAL - Sitio público (HTML estático)
+#
+# Durante el desarrollo los archivos cambian muchas veces al día. Si el
+# navegador guarda una copia de index.html, del CSS o de los JS, la página se
+# queda con una versión vieja: el formulario de consulta deja de responder o
+# los enlaces nuevos no aparecen.
+#
+# Estas reglas obligan al navegador a preguntar si el archivo cambió en cada
+# visita. Si no cambió, Apache responde 304 y la página sigue siendo rápida;
+# si cambió, se descarga la versión nueva. No afecta a las imágenes, que sí
+# conviene cachear.
+# ============================================================================
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(html|htm|css|js)$">
+        Header set Cache-Control "no-cache, must-revalidate"
+    </FilesMatch>
+</IfModule>
+
+# Compresión de texto: reduce el peso del HTML, CSS y JS.
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript text/javascript application/json image/svg+xml
+</IfModule>
+
+# Tipo de contenido correcto para los módulos JavaScript.
+<IfModule mod_mime.c>
+    AddType application/javascript .js
+</IfModule>
+
+# Página de inicio por defecto.
+DirectoryIndex index.html
